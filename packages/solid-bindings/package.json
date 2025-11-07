@@ -1,0 +1,61 @@
+{
+  "name": "@sylphx/silk-solid",
+  "version": "1.0.0",
+  "description": "Solid.js bindings for Silk - zero-runtime CSS-in-TypeScript with fine-grained reactivity",
+  "keywords": [
+    "css",
+    "css-in-js",
+    "typescript",
+    "solidjs",
+    "solid",
+    "reactive",
+    "fine-grained",
+    "silk"
+  ],
+  "author": "SylphX Ltd",
+  "license": "MIT",
+  "homepage": "https://sylphx.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sylphxltd/silk.git",
+    "directory": "packages/solid-bindings"
+  },
+  "bugs": {
+    "url": "https://github.com/sylphxltd/silk/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "dist/**/*.d.ts.map",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "bun run build"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.7.0"
+  },
+  "dependencies": {
+    "@sylphx/silk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "solid-js": "^1.8.0",
+    "typescript": "^5.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

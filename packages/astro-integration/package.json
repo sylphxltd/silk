@@ -1,0 +1,62 @@
+{
+  "name": "@sylphx/silk-astro",
+  "version": "1.0.0",
+  "description": "Astro integration for Silk - zero-runtime CSS-in-TypeScript with islands architecture support",
+  "keywords": [
+    "css",
+    "css-in-js",
+    "typescript",
+    "astro",
+    "astro-integration",
+    "islands",
+    "partial-hydration",
+    "silk"
+  ],
+  "author": "SylphX Ltd",
+  "license": "MIT",
+  "homepage": "https://sylphx.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sylphxltd/silk.git",
+    "directory": "packages/astro-integration"
+  },
+  "bugs": {
+    "url": "https://github.com/sylphxltd/silk/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "dist/**/*.d.ts.map",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "bun run build"
+  },
+  "peerDependencies": {
+    "astro": "^3.0.0 || ^4.0.0"
+  },
+  "dependencies": {
+    "@sylphx/silk": "workspace:*",
+    "@sylphx/silk-react": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "astro": "^4.0.0",
+    "typescript": "^5.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

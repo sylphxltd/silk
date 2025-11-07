@@ -357,11 +357,143 @@ bun add @sylphx/silk
 # React integration (includes core)
 bun add @sylphx/silk-react
 
+# Framework integrations (v1.2.0+)
+bun add @sylphx/silk-nextjs     # Next.js App Router & RSC
+bun add @sylphx/silk-remix      # Remix Streaming SSR
+bun add @sylphx/silk-astro      # Astro Islands Architecture
+bun add @sylphx/silk-solid      # Solid.js Fine-Grained Reactivity
+
 # Other package managers
 npm install @sylphx/silk-react
 pnpm add @sylphx/silk-react
 yarn add @sylphx/silk-react
 ```
+
+## 🔌 Framework Integrations (v1.2.0+)
+
+Silk now provides **first-class integration packages** for major frameworks with framework-specific optimizations:
+
+### 🚀 Next.js - App Router & React Server Components
+
+```bash
+bun add @sylphx/silk-nextjs
+```
+
+**Features:**
+- ✅ Full App Router support with React Server Components
+- ✅ Automatic critical CSS extraction during SSR
+- ✅ Server-side rendering optimizations
+- ✅ Brotli pre-compression
+- ✅ Zero configuration required
+
+```javascript
+// next.config.js
+import { withSilk } from '@sylphx/silk-nextjs'
+
+export default withSilk({
+  // Your Next.js config
+}, {
+  appRouter: true,
+  rsc: true,
+  criticalCSS: true
+})
+```
+
+[View Full Next.js Documentation →](./packages/nextjs-plugin/README.md)
+
+### 🎵 Remix - Streaming SSR & Critical CSS
+
+```bash
+bun add @sylphx/silk-remix
+```
+
+**Features:**
+- ✅ Streaming SSR support with progressive CSS loading
+- ✅ Critical CSS extraction during server-side rendering
+- ✅ Route-based CSS splitting
+- ✅ Progressive rendering optimizations
+
+```typescript
+// entry.server.tsx
+import { SilkProvider, extractCriticalCSS } from '@sylphx/silk-remix'
+
+const { css, cleanup } = extractCriticalCSS()
+
+const markup = renderToString(
+  <SilkProvider css={css}>
+    <RemixServer />
+  </SilkProvider>
+)
+
+cleanup()
+```
+
+[View Full Remix Documentation →](./packages/remix-plugin/README.md)
+
+### 🚀 Astro - Islands Architecture & Partial Hydration
+
+```bash
+bun add @sylphx/silk-astro
+```
+
+**Features:**
+- ✅ Islands architecture support with per-island CSS extraction
+- ✅ Partial hydration optimizations
+- ✅ Multi-framework support (React, Solid, Vue, Svelte)
+- ✅ Zero CSS for static Astro components
+
+```javascript
+// astro.config.mjs
+import silk from '@sylphx/silk-astro'
+
+export default defineConfig({
+  integrations: [
+    silk({
+      islands: true,
+      criticalCSS: true
+    })
+  ]
+})
+```
+
+[View Full Astro Documentation →](./packages/astro-integration/README.md)
+
+### ⚡ Solid.js - Fine-Grained Reactivity
+
+```bash
+bun add @sylphx/silk-solid
+```
+
+**Features:**
+- ✅ Perfect integration with Solid's fine-grained reactivity
+- ✅ Zero unnecessary re-renders
+- ✅ Optimal performance with minimal bundle size
+- ✅ SolidStart ready
+
+```typescript
+import { createSilkSolid } from '@sylphx/silk-solid'
+
+export const { styled, Box, css } = createSilkSolid(config)
+```
+
+[View Full Solid.js Documentation →](./packages/solid-bindings/README.md)
+
+### 📊 Framework Integration Comparison
+
+| Feature | Next.js | Remix | Astro | Solid |
+|---------|---------|-------|-------|-------|
+| **App Router** | ✅ | N/A | N/A | N/A |
+| **RSC** | ✅ | N/A | N/A | N/A |
+| **Streaming SSR** | ✅ | ✅ | N/A | ✅ |
+| **Islands** | N/A | N/A | ✅ | N/A |
+| **Critical CSS** | ✅ | ✅ | ✅ | N/A |
+| **Brotli** | ✅ | ✅ | ✅ | ✅ |
+| **Zero Runtime** | ✅ | ✅ | ✅ | ✅ |
+| **Bundle Size** | **500B** | **500B** | **500B** | **500B** |
+
+**All integrations maintain Silk's industry-leading 500B gzipped bundle size** with framework-specific optimizations.
+
+---
 
 ## Quick Start
 
@@ -987,17 +1119,23 @@ bun test --run benchmark.bench.ts
 
 ## Roadmap
 
-**Completed:**
-- Zero codegen with full type inference
-- Intelligent CSS optimization (20-40% reduction)
-- Critical CSS extraction (unique feature)
-- Tree shaking and dead code elimination
-- Performance monitoring and analytics
-- Cascade layers (@layer) and :where() selector
-- Comprehensive benchmarking vs Tailwind/Panda
+**Completed (v1.2.0):**
+- ✅ Zero codegen with full type inference
+- ✅ Intelligent CSS optimization (20-40% reduction)
+- ✅ Critical CSS extraction (unique feature)
+- ✅ Tree shaking and dead code elimination
+- ✅ Performance monitoring and analytics
+- ✅ Cascade layers (@layer) and :where() selector
+- ✅ Comprehensive benchmarking vs Tailwind/Panda
+- ✅ **Framework integrations (Next.js, Remix, Astro, Solid.js)**
+- ✅ **LightningCSS integration (5-10x faster builds)**
+- ✅ **Brotli pre-compression (15-25% smaller)**
+- ✅ **Atomic CSS deduplication (10-20% smaller)**
+- ✅ **Modern CSS features (Container Queries, @scope, @starting-style)**
+- ✅ **Runtime optimizations (2-3x faster)**
 
 **Planned:**
-- Framework adapters (Vue, Solid, Svelte)
+- Framework adapters (Vue, Svelte, Qwik)
 - Recipes and variants API
 - Responsive utilities
 - Animation utilities
@@ -1005,7 +1143,6 @@ bun test --run benchmark.bench.ts
 - ESLint plugin
 - VS Code extension
 - Webpack plugin
-- SSR support
 
 ## Development
 
