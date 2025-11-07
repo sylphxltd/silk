@@ -12,125 +12,91 @@ bun add @sylphx/silk-remix
 
 ## Quick Start
 
-### 1. Configure Silk
+### 1. Configure Vite
 
 ```typescript
-// app/silk.config.ts
-import { defineConfig } from '@sylphx/silk'
-import { createSilkReact } from '@sylphx/silk-remix'
+// vite.config.ts
+import { defineConfig } from 'vite'
+import { vitePlugin as remix } from '@remix-run/dev'
+import { silkPlugin } from '@sylphx/silk-remix/vite'
 
-export const { styled, Box, css } = createSilkReact(
-  defineConfig({
-    colors: {
-      brand: { 500: '#3b82f6' }
-    },
-    spacing: { 4: '1rem' }
-  })
-)
+export default defineConfig({
+  plugins: [
+    silkPlugin({
+      outputFile: 'public/silk.css',
+      babelOptions: {
+        production: true,
+      }
+    }), // Add BEFORE Remix plugin
+    remix(),
+  ],
+})
 ```
 
-### 2. Setup Entry Server
-
-```typescript
-// app/entry.server.tsx
-import { renderToString } from 'react-dom/server'
-import { RemixServer } from '@remix-run/react'
-import type { EntryContext } from '@remix-run/node'
-import { SilkProvider, extractCriticalCSS } from '@sylphx/silk-remix'
-
-export default function handleRequest(
-  request: Request,
-  responseStatusCode: number,
-  responseHeaders: Headers,
-  remixContext: EntryContext
-) {
-  // Extract critical CSS during SSR
-  const { css, cleanup } = extractCriticalCSS()
-
-  const markup = renderToString(
-    <SilkProvider css={css}>
-      <RemixServer context={remixContext} url={request.url} />
-    </SilkProvider>
-  )
-
-  // Cleanup after rendering
-  cleanup()
-
-  responseHeaders.set('Content-Type', 'text/html')
-
-  return new Response('<!DOCTYPE html>' + markup, {
-    status: responseStatusCode,
-    headers: responseHeaders,
-  })
-}
-```
-
-### 3. Add Links to Root
+### 2. Add CSS Link to Root
 
 ```typescript
 // app/root.tsx
-import { Links, LiveReload, Meta, Outlet, Scripts } from '@remix-run/react'
 import type { LinksFunction } from '@remix-run/node'
-import { silkLinks } from '@sylphx/silk-remix'
 
 export const links: LinksFunction = () => [
-  ...silkLinks(),
+  { rel: 'stylesheet', href: '/silk.css' },
 ]
 
 export default function App() {
   return (
     <html lang="en">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
       <body>
         <Outlet />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   )
 }
 ```
 
-### 4. Use in Routes
+### 3. Use in Routes
 
 ```typescript
 // app/routes/index.tsx
-import { Box } from '~/silk.config'
+import { css } from '@sylphx/silk'
+
+const container = css({ px: 4, py: 6 })
 
 export default function Index() {
   return (
-    <Box px={4} py={6}>
+    <div className={container}>
       <h1>Welcome to Silk + Remix!</h1>
-    </Box>
+    </div>
   )
 }
 ```
 
 ## Features
 
-### ✅ Streaming SSR
-- CSS extracted during server-side rendering
-- Progressive rendering with streaming
-- Zero runtime overhead
+### ✅ Zero-Runtime Compilation
+- CSS extracted at build time via Babel plugin
+- No runtime CSS-in-JS overhead
+- Static atomic class names
 
-### ✅ Critical CSS
-- Automatic critical CSS extraction
-- Inlined in HTML for faster first paint
-- Route-based CSS splitting
+### ✅ Remix v2+ (Vite-based)
+- Full Vite integration
+- Fast HMR with state preservation
+- Streaming SSR compatible
 
 ### ✅ Performance
-- Brotli pre-compression (15-25% smaller)
-- LightningCSS optimization (5-10x faster)
-- Atomic CSS deduplication (10-20% smaller)
+- **-6.5KB JS bundle** (runtime code eliminated)
+- **Brotli compression** (389B for 1KB CSS, -61%)
+- **Atomic CSS** (one class per property)
+- **Fast builds** (Babel transformation)
 
 ### ✅ Developer Experience
 - Full TypeScript support
-- Zero codegen required
+- Zero configuration needed
 - Hot module replacement (HMR)
 
 ## Advanced Usage

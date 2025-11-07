@@ -297,8 +297,8 @@
   resolved "https://registry.npmjs.org/@babel/plugin-transform-react-pure-annotations/-/plugin-transform-react-pure-annotations-7.27.1.tgz"
   integrity sha512-JfuinvDOsD9FVMTHpzA/pBLisxpv1aSf+OIV8lgH3MuWrks19R27e6a6DipIg4aX1Zm9Wpb04p8wljfKrVSnPA==
   dependencies:
-    "@babel/helper-plugin-utils" "^7.27.1"
     "@babel/helper-annotate-as-pure" "^7.27.1"
+    "@babel/helper-plugin-utils" "^7.27.1"
 
 "@babel/plugin-transform-typescript@^7.28.5":
   version "7.28.5"
@@ -1324,6 +1324,7 @@
   dependencies:
     "@sylphx/silk" "workspace:*"
     "@sylphx/silk-react" "workspace:*"
+    "@sylphx/silk-vite-plugin" "workspace:*"
 
 "@sylphx/silk-nextjs@packages/nextjs-plugin":
   version "workspace:packages/nextjs-plugin"
@@ -1335,8 +1336,10 @@
     react "^18.0.0"
     typescript "^5.3.0"
   dependencies:
+    "@sylphx/babel-plugin-silk" "workspace:*"
     "@sylphx/silk" "workspace:*"
     "@sylphx/silk-react" "workspace:*"
+    "@sylphx/silk-vite-plugin" "workspace:*"
 
 "@sylphx/silk-preact@packages/preact-bindings":
   version "workspace:packages/preact-bindings"
@@ -1347,6 +1350,7 @@
     typescript "^5.3.0"
   dependencies:
     "@sylphx/silk" "workspace:*"
+    "@sylphx/silk-vite-plugin" "workspace:*"
 
 "@sylphx/silk-preset-material@packages/preset-material":
   version "workspace:packages/preset-material"
@@ -1373,6 +1377,7 @@
     typescript "^5.3.0"
   dependencies:
     "@sylphx/silk" "workspace:*"
+    "@sylphx/silk-vite-plugin" "workspace:*"
 
 "@sylphx/silk-react@packages/react", "@sylphx/silk-react@workspace:*":
   version "workspace:packages/react"
@@ -1398,6 +1403,7 @@
   dependencies:
     "@sylphx/silk" "workspace:*"
     "@sylphx/silk-react" "workspace:*"
+    "@sylphx/silk-vite-plugin" "workspace:*"
 
 "@sylphx/silk-solid@packages/solid-bindings":
   version "workspace:packages/solid-bindings"
@@ -1408,6 +1414,7 @@
     typescript "^5.3.0"
   dependencies:
     "@sylphx/silk" "workspace:*"
+    "@sylphx/silk-vite-plugin" "workspace:*"
 
 "@sylphx/silk-svelte@packages/svelte-bindings":
   version "workspace:packages/svelte-bindings"
@@ -1418,6 +1425,7 @@
     typescript "^5.3.0"
   dependencies:
     "@sylphx/silk" "workspace:*"
+    "@sylphx/silk-vite-plugin" "workspace:*"
 
 "@sylphx/silk-vite-plugin@packages/vite-plugin", "@sylphx/silk-vite-plugin@workspace:*":
   version "workspace:packages/vite-plugin"
@@ -1443,6 +1451,7 @@
     vue "^3.4.0"
   dependencies:
     "@sylphx/silk" "workspace:*"
+    "@sylphx/silk-vite-plugin" "workspace:*"
 
 "@types/babel__core@^7.20.5":
   version "7.20.5"

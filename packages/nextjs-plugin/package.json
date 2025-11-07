@@ -50,7 +50,9 @@
   },
   "dependencies": {
     "@sylphx/silk": "workspace:*",
-    "@sylphx/silk-react": "workspace:*"
+    "@sylphx/silk-react": "workspace:*",
+    "@sylphx/silk-vite-plugin": "workspace:*",
+    "@sylphx/babel-plugin-silk": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

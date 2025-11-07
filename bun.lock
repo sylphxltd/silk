@@ -63,6 +63,7 @@
       "dependencies": {
         "@sylphx/silk": "workspace:*",
         "@sylphx/silk-react": "workspace:*",
+        "@sylphx/silk-vite-plugin": "workspace:*",
       },
       "devDependencies": {
         "@types/node": "^20.0.0",
@@ -104,8 +105,10 @@
       "name": "@sylphx/silk-nextjs",
       "version": "2.0.2",
       "dependencies": {
+        "@sylphx/babel-plugin-silk": "workspace:*",
         "@sylphx/silk": "workspace:*",
         "@sylphx/silk-react": "workspace:*",
+        "@sylphx/silk-vite-plugin": "workspace:*",
       },
       "devDependencies": {
         "@types/node": "^20.0.0",
@@ -124,6 +127,7 @@
       "version": "2.0.2",
       "dependencies": {
         "@sylphx/silk": "workspace:*",
+        "@sylphx/silk-vite-plugin": "workspace:*",
       },
       "devDependencies": {
         "@types/node": "^20.0.0",
@@ -163,6 +167,7 @@
       "version": "2.0.2",
       "dependencies": {
         "@sylphx/silk": "workspace:*",
+        "@sylphx/silk-vite-plugin": "workspace:*",
       },
       "devDependencies": {
         "@builder.io/qwik": "^1.5.0",
@@ -195,6 +200,7 @@
       "dependencies": {
         "@sylphx/silk": "workspace:*",
         "@sylphx/silk-react": "workspace:*",
+        "@sylphx/silk-vite-plugin": "workspace:*",
       },
       "devDependencies": {
         "@remix-run/node": "^2.0.0",
@@ -215,6 +221,7 @@
       "version": "2.0.2",
       "dependencies": {
         "@sylphx/silk": "workspace:*",
+        "@sylphx/silk-vite-plugin": "workspace:*",
       },
       "devDependencies": {
         "@types/node": "^20.0.0",
@@ -230,6 +237,7 @@
       "version": "2.0.2",
       "dependencies": {
         "@sylphx/silk": "workspace:*",
+        "@sylphx/silk-vite-plugin": "workspace:*",
       },
       "devDependencies": {
         "@types/node": "^20.0.0",
@@ -265,6 +273,7 @@
       "version": "2.0.2",
       "dependencies": {
         "@sylphx/silk": "workspace:*",
+        "@sylphx/silk-vite-plugin": "workspace:*",
       },
       "devDependencies": {
         "@types/node": "^20.0.0",

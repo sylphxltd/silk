@@ -15,74 +15,84 @@ bun add @sylphx/silk-nextjs
 ### 1. Configure Next.js
 
 ```typescript
-// next.config.js
+// next.config.js (or .mjs)
 import { withSilk } from '@sylphx/silk-nextjs'
 
 export default withSilk({
   // Your Next.js config
 }, {
-  // Silk config
-  appRouter: true,           // Enable App Router optimizations
-  rsc: true,                 // React Server Components support
-  criticalCSS: true,         // Extract critical CSS
-  brotli: true,              // Pre-compress CSS (15-25% smaller)
+  // Silk options
+  outputFile: 'silk.css',
+  babelOptions: {
+    production: true,
+    classPrefix: 'silk',
+  },
+  compression: {
+    brotli: true,            // Pre-compress CSS (15-25% smaller)
+    gzip: true,
+  }
 })
 ```
 
-### 2. Create Silk Config
-
-```typescript
-// app/silk.config.ts
-import { defineConfig } from '@sylphx/silk'
-import { createSilkReact } from '@sylphx/silk-nextjs'
-
-export const { styled, Box, css } = createSilkReact(
-  defineConfig({
-    colors: {
-      brand: { 500: '#3b82f6' }
-    },
-    spacing: { 4: '1rem' }
-  })
-)
-```
-
-### 3. Use in Components
+### 2. Use in Components
 
 ```typescript
 // app/components/Button.tsx
-'use client' // or 'use server'
+'use client'
 
-import { styled } from '../silk.config'
+import { css } from '@sylphx/silk'
 
-export const Button = styled('button', {
-  bg: 'brand.500',
+const button = css({
+  bg: 'blue',
+  color: 'white',
   px: 4,
   py: 2,
+  rounded: 8,
   _hover: { opacity: 0.8 }
 })
+
+export function Button({ children }) {
+  return <button className={button}>{children}</button>
+}
+```
+
+### 3. Import CSS in Layout
+
+```typescript
+// app/layout.tsx
+import './silk.css'  // CSS is generated at build time
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>{children}</body>
+    </html>
+  )
+}
 ```
 
 ## Features
 
+### ✅ Zero-Runtime Compilation
+- CSS extracted at build time via Babel plugin
+- No runtime CSS-in-JS overhead
+- Static atomic class names
+
 ### ✅ App Router Support
 - Full Next.js 13+ App Router compatibility
-- Automatic CSS extraction during SSR
-- Server Components ready
+- Works with Pages Router too
+- Server and Client Components supported
 
 ### ✅ React Server Components (RSC)
-- Zero runtime overhead for server components
-- CSS extracted at build time
-- Client components work seamlessly
-
-### ✅ Critical CSS
-- Automatic critical CSS extraction
-- Faster first contentful paint
-- Route-based CSS splitting
+- Zero runtime overhead
+- CSS extracted during build
+- True zero-bundle for server components
 
 ### ✅ Performance
-- Brotli pre-compression (15-25% smaller)
-- LightningCSS optimization (5-10x faster)
-- Atomic CSS deduplication (10-20% smaller)
+- **-6.5KB JS bundle** (runtime code eliminated)
+- **Brotli compression** (389B for 1KB CSS, -61%)
+- **Atomic CSS** (one class per property)
+- **Fast builds** (Babel transformation)
 
 ## App Router Example
 
@@ -110,13 +120,15 @@ export default function RootLayout({
 
 ```typescript
 // app/page.tsx
-import { Box } from './silk.config'
+import { css } from '@sylphx/silk'
+
+const container = css({ px: 4, py: 6 })
 
 export default function Home() {
   return (
-    <Box px={4} py={6}>
+    <div className={container}>
       <h1>Welcome to Silk + Next.js!</h1>
-    </Box>
+    </div>
   )
 }
 ```
@@ -127,16 +139,23 @@ export default function Home() {
 // app/components/ServerCard.tsx
 // No 'use client' - this is a server component!
 
-import { Box } from '../silk.config'
+import { css } from '@sylphx/silk'
+
+const card = css({
+  p: 4,
+  rounded: 'lg',
+  bg: 'white',
+  shadow: 'md'
+})
 
 export function ServerCard({ title, children }) {
   // Styles are extracted at build time
   // Zero runtime overhead!
   return (
-    <Box p={4} rounded="lg" bg="white" shadow="md">
+    <div className={card}>
       <h2>{title}</h2>
       {children}
-    </Box>
+    </div>
   )
 }
 ```
@@ -148,22 +167,25 @@ interface SilkNextConfig {
   // Output CSS file path
   outputFile?: string        // default: 'silk.css'
 
-  // Enable App Router optimizations
-  appRouter?: boolean        // default: true
+  // Minify CSS output
+  minify?: boolean           // default: true in production
 
-  // Enable React Server Components
-  rsc?: boolean              // default: true
+  // Babel plugin options
+  babelOptions?: {
+    production?: boolean     // default: NODE_ENV === 'production'
+    classPrefix?: string     // default: 'silk'
+    importSources?: string[] // default: ['@sylphx/silk']
+  }
 
-  // Extract critical CSS
-  criticalCSS?: boolean      // default: true
+  // Compression options
+  compression?: {
+    brotli?: boolean         // default: true
+    brotliQuality?: number   // default: 11 (0-11)
+    gzip?: boolean           // default: true
+    gzipLevel?: number       // default: 9 (0-9)
+  }
 
-  // Production optimizations
-  production?: boolean       // default: true in production
-
-  // Brotli pre-compression
-  brotli?: boolean           // default: true
-
-  // Inject CSS into _document
+  // Inject CSS link into HTML
   inject?: boolean           // default: true
 }
 ```

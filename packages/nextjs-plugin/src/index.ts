@@ -1,18 +1,14 @@
 /**
  * @sylphx/silk-nextjs
  * Next.js integration for Silk with App Router and RSC support
+ * Uses unplugin for zero-runtime CSS compilation
  */
 
 import type { NextConfig } from 'next'
 import type { DesignConfig } from '@sylphx/silk'
+import { unpluginSilk, type SilkPluginOptions } from '@sylphx/silk-vite-plugin'
 
-export interface SilkNextConfig {
-  /**
-   * Output CSS file path
-   * @default 'silk.css'
-   */
-  outputFile?: string
-
+export interface SilkNextConfig extends SilkPluginOptions {
   /**
    * Enable App Router optimizations
    * @default true
@@ -32,19 +28,7 @@ export interface SilkNextConfig {
   criticalCSS?: boolean
 
   /**
-   * Enable production optimizations
-   * @default true in production
-   */
-  production?: boolean
-
-  /**
-   * Brotli pre-compression
-   * @default true
-   */
-  brotli?: boolean
-
-  /**
-   * Inject CSS into _document
+   * Inject CSS link into HTML
    * @default true
    */
   inject?: boolean
@@ -62,9 +46,10 @@ export interface SilkNextConfig {
  *   // Next.js config
  * }, {
  *   // Silk config
- *   appRouter: true,
- *   rsc: true,
- *   criticalCSS: true
+ *   outputFile: 'silk.css',
+ *   babelOptions: {
+ *     production: true
+ *   }
  * })
  * ```
  */
@@ -77,10 +62,22 @@ export function withSilk(
     appRouter = true,
     rsc = true,
     criticalCSS = true,
-    production = process.env.NODE_ENV === 'production',
-    brotli = true,
     inject = true,
+    babelOptions = {},
+    compression = {},
+    minify,
   } = silkConfig
+
+  // Configure Silk plugin with Next.js specific settings
+  const silkPluginOptions: SilkPluginOptions = {
+    outputFile,
+    minify,
+    compression,
+    babelOptions: {
+      ...babelOptions,
+      production: babelOptions.production ?? process.env.NODE_ENV === 'production',
+    },
+  }
 
   return {
     ...nextConfig,
@@ -92,27 +89,12 @@ export function withSilk(
         config = nextConfig.webpack(config, options)
       }
 
-      // Add Silk CSS loader
-      config.module.rules.push({
-        test: /\.(tsx|ts|jsx|js)$/,
-        use: [
-          {
-            loader: require.resolve('./loader'),
-            options: {
-              outputFile,
-              production: production && !dev,
-              isServer,
-              appRouter,
-              rsc,
-              criticalCSS,
-              brotli,
-            },
-          },
-        ],
-      })
+      // Add Silk unplugin
+      config.plugins = config.plugins || []
+      config.plugins.push(unpluginSilk.webpack(silkPluginOptions))
 
-      // Inject CSS in client bundle
-      if (!isServer && inject) {
+      // Inject CSS in client bundle (only in production)
+      if (!isServer && inject && !dev) {
         const originalEntry = config.entry
         config.entry = async () => {
           const entries = await originalEntry()

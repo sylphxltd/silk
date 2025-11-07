@@ -46,8 +46,95 @@ function App() {
 - ✅ **Styled Components** - `styled()` API like styled-components
 - ✅ **Box Component** - Flexible primitive with style props
 - ✅ **Full Type Safety** - Only design tokens allowed
-- ✅ **Zero Runtime** - Build-time CSS extraction
+- ✅ **Zero Runtime** - Build-time CSS extraction with Babel plugin
 - ✅ **React 18+** - Modern React support
+
+## Zero-Runtime Compilation
+
+As of v2.0, Silk uses **build-time transformation** for true zero-runtime overhead:
+
+### Setup with Vite
+
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import silk from '@sylphx/silk-vite-plugin'
+
+export default defineConfig({
+  plugins: [
+    silk(), // Add BEFORE React plugin
+    react(),
+  ],
+})
+```
+
+### Direct css() Import Pattern
+
+For zero-runtime, import `css` directly instead of using `createStyleSystem()`:
+
+```tsx
+// ✅ Zero-Runtime (recommended)
+import { css } from '@sylphx/silk'
+
+const button = css({
+  bg: 'blue',
+  color: 'white',
+  px: 4,
+  py: 2,
+  _hover: { opacity: 0.8 }
+})
+
+function Button({ children }) {
+  return <button className={button}>{children}</button>
+}
+```
+
+### How It Works
+
+1. **Build Time**: Babel plugin transforms `css()` calls into static class names
+   ```tsx
+   // Your code
+   const button = css({ bg: 'blue', p: 4 })
+
+   // Transformed to
+   const button = "silk_bg_blue_ey45 silk_p_4_dozm"
+   ```
+
+2. **CSS Extraction**: CSS rules extracted to separate `silk.css` file
+   ```css
+   .silk_bg_blue_ey45 { background-color: blue; }
+   .silk_p_4_dozm { padding: 1rem; }
+   ```
+
+3. **Runtime**: Zero CSS-in-JS overhead, just static class names
+
+### Performance Benefits
+
+- **-6.5KB JS bundle** (runtime code tree-shaken)
+- **1KB CSS file** (atomic classes)
+- **389B Brotli** (-61% compression)
+- **0ms runtime** (no CSS generation at runtime)
+
+### Using with Styled Components
+
+The `styled()` API works with zero-runtime automatically:
+
+```tsx
+import { createSilkReact } from '@sylphx/silk-react'
+
+const { styled } = createSilkReact(config)
+
+// Styles are extracted at build-time
+const Button = styled('button', {
+  bg: 'brand.500',
+  px: 6,
+  py: 4,
+  _hover: { opacity: 0.8 }
+})
+```
+
+**Note:** Ensure your bundler is configured with `@sylphx/silk-vite-plugin` or equivalent.
 
 ## Ecosystem
 
