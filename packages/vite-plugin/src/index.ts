@@ -1,13 +1,14 @@
 /**
  * @sylphx/silk-vite-plugin
- * Build-time CSS extraction with pre-compression (15-25% smaller)
+ * Vite plugin for zero-runtime Silk CSS-in-TypeScript
+ *
+ * Uses @sylphx/babel-plugin-silk for build-time compilation
  */
 
 import type { Plugin, ViteDevServer } from 'vite'
-import { cssRules } from '@sylphx/silk'
+import type { SilkMetadata } from '@sylphx/babel-plugin-silk'
 import * as fs from 'node:fs'
 import * as path from 'node:path'
-import { compress } from 'brotli-wasm'
 import { gzipSync } from 'node:zlib'
 
 export interface CompressionOptions {
@@ -70,6 +71,18 @@ export interface SilkPluginOptions {
    * @default { brotli: true, gzip: true }
    */
   compression?: CompressionOptions
+
+  /**
+   * Babel plugin options
+   * Passed to @sylphx/babel-plugin-silk
+   */
+  babelOptions?: {
+    production?: boolean
+    classPrefix?: string
+    importSources?: string[]
+    tokens?: Record<string, any>
+    breakpoints?: Record<string, string>
+  }
 }
 
 export function silk(options: SilkPluginOptions = {}): Plugin {
@@ -78,7 +91,8 @@ export function silk(options: SilkPluginOptions = {}): Plugin {
     inject = true,
     minify,
     watch = true,
-    compression = {}
+    compression = {},
+    babelOptions = {},
   } = options
 
   const compressionConfig: Required<CompressionOptions> = {
@@ -90,7 +104,12 @@ export function silk(options: SilkPluginOptions = {}): Plugin {
 
   let server: ViteDevServer | undefined
   let isBuild = false
-  const cssCache = new Set<string>()
+
+  // Global CSS registry (className -> rule)
+  const cssRules = new Map<string, string>()
+
+  // Track which files have been transformed
+  const transformedFiles = new Set<string>()
 
   /**
    * Generate compressed versions of CSS
@@ -98,15 +117,19 @@ export function silk(options: SilkPluginOptions = {}): Plugin {
   async function generateCompressedAssets(css: string, fileName: string) {
     const outputs: Array<{ fileName: string; source: Buffer }> = []
 
-    // Generate Brotli (.br)
+    // Generate Brotli (.br) - Using Node.js built-in zlib brotli
     if (compressionConfig.brotli) {
       try {
-        const compressed = await compress(Buffer.from(css, 'utf-8'), {
-          quality: compressionConfig.brotliQuality,
+        // Use Node.js built-in brotli compression
+        const { brotliCompressSync, constants } = await import('node:zlib')
+        const compressed = brotliCompressSync(Buffer.from(css, 'utf-8'), {
+          params: {
+            [constants.BROTLI_PARAM_QUALITY]: compressionConfig.brotliQuality,
+          },
         })
         outputs.push({
           fileName: `${fileName}.br`,
-          source: Buffer.from(compressed),
+          source: compressed,
         })
       } catch (error) {
         console.warn('Brotli compression failed:', error)
@@ -130,22 +153,6 @@ export function silk(options: SilkPluginOptions = {}): Plugin {
   }
 
   /**
-   * Collect CSS rules from runtime
-   */
-  function collectCSS(): string {
-    const rules: string[] = []
-
-    for (const [className, rule] of cssRules) {
-      if (!cssCache.has(className)) {
-        rules.push(rule)
-        cssCache.add(className)
-      }
-    }
-
-    return rules.join('\n')
-  }
-
-  /**
    * Minify CSS (basic implementation)
    */
   function minifyCSS(css: string): string {
@@ -157,10 +164,10 @@ export function silk(options: SilkPluginOptions = {}): Plugin {
   }
 
   /**
-   * Generate CSS output
+   * Generate final CSS output
    */
   function generateCSS(): string {
-    let css = collectCSS()
+    let css = Array.from(cssRules.values()).join('\n')
 
     if (minify ?? isBuild) {
       css = minifyCSS(css)
@@ -174,6 +181,11 @@ export function silk(options: SilkPluginOptions = {}): Plugin {
 
     configResolved(config) {
       isBuild = config.command === 'build'
+
+      // Set production flag for Babel plugin
+      if (isBuild && babelOptions.production === undefined) {
+        babelOptions.production = true
+      }
     },
 
     configureServer(_server) {
@@ -182,12 +194,12 @@ export function silk(options: SilkPluginOptions = {}): Plugin {
       // Hot reload CSS in dev mode
       if (watch) {
         const watcher = setInterval(() => {
-          const newCSS = collectCSS()
-          if (newCSS) {
-            server?.ws.send({
+          const css = generateCSS()
+          if (css && server) {
+            server.ws.send({
               type: 'custom',
               event: 'silk:update',
-              data: { css: newCSS },
+              data: { css },
             })
           }
         }, 100)
@@ -195,6 +207,69 @@ export function silk(options: SilkPluginOptions = {}): Plugin {
         server.httpServer?.on('close', () => {
           clearInterval(watcher)
         })
+      }
+    },
+
+    /**
+     * Transform TypeScript/TSX files with Babel plugin
+     */
+    async transform(code, id) {
+      // Only transform TypeScript files
+      if (!id.endsWith('.ts') && !id.endsWith('.tsx')) {
+        return null
+      }
+
+      // Skip node_modules
+      if (id.includes('node_modules')) {
+        return null
+      }
+
+      // Check if file imports @sylphx/silk
+      if (!code.includes('@sylphx/silk')) {
+        return null
+      }
+
+      try {
+        // Dynamic import to avoid bundling in client build
+        const { transformSync } = await import('@babel/core')
+        const babelPluginSilk = (await import('@sylphx/babel-plugin-silk')).default
+
+        // Transform with Babel plugin
+        const result = transformSync(code, {
+          filename: id,
+          plugins: [[babelPluginSilk, babelOptions]],
+          sourceMaps: true,
+          configFile: false,
+          babelrc: false,
+        })
+
+        if (!result || !result.code) {
+          return null
+        }
+
+        // Extract CSS from metadata
+        const metadata = result.metadata as { silk?: SilkMetadata } | undefined
+        if (metadata?.silk && metadata.silk.cssRules) {
+          for (const [className, rule] of metadata.silk.cssRules) {
+            cssRules.set(className, rule)
+          }
+
+          // Log in dev mode
+          if (!isBuild && metadata.silk.cssRules.length > 0) {
+            console.log(
+              `[Silk] Compiled ${metadata.silk.cssRules.length} CSS rules from ${path.basename(id)}`
+            )
+          }
+        }
+
+        return {
+          code: result.code,
+          map: result.map || undefined,
+        }
+      } catch (error) {
+        // Log error but don't fail the build
+        console.error(`[Silk] Transform error in ${id}:`, error)
+        return null
       }
     },
 
@@ -245,6 +320,7 @@ export function silk(options: SilkPluginOptions = {}): Plugin {
         const originalSize = Buffer.byteLength(css, 'utf-8')
         console.log('\n📦 Silk CSS Bundle:')
         console.log(`  Original: ${formatBytes(originalSize)} (${outputFile})`)
+        console.log(`  Rules: ${cssRules.size} atomic classes`)
 
         for (const asset of compressedAssets) {
           const compressedSize = asset.source.length
@@ -283,6 +359,14 @@ export function silk(options: SilkPluginOptions = {}): Plugin {
         })
       }
     },
+
+    // Build stats
+    closeBundle() {
+      if (isBuild && cssRules.size > 0) {
+        const css = generateCSS()
+        console.log(`[Silk] Final bundle: ${cssRules.size} atomic classes, ${formatBytes(Buffer.byteLength(css, 'utf-8'))}`)
+      }
+    },
   }
 }
 
@@ -290,7 +374,7 @@ export default silk
 
 /**
  * Client-side script for hot CSS updates
- * This should be imported in the app entry point
+ * Import this in your app entry point for HMR
  */
 export const silkClient = `
 if (import.meta.hot) {
