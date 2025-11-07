@@ -132,6 +132,17 @@ export {
 } from './selectors'
 export type { SelectorConfig } from './selectors'
 
+// Native CSS Nesting
+export {
+  isNestableSelector,
+  generateNestedCSS,
+  groupRulesBySelector,
+  convertToNestedCSS,
+  isNestingSupported,
+  defaultNestingConfig,
+} from './nesting'
+export type { NestingConfig } from './nesting'
+
 // Tree Shaking & Dead Code Elimination (types only - implementations use Node.js APIs)
 export type { TreeShakingConfig } from './tree-shaking'
 
