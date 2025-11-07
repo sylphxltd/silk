@@ -1,6 +1,6 @@
 {
   "name": "@sylphx/silk-preset-minimal",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Minimal preset for Silk - clean, simple, and elegant design system",
   "keywords": [
     "css",
@@ -44,7 +44,7 @@
     "prepublishOnly": "bun run build"
   },
   "peerDependencies": {
-    "@sylphx/silk": "^1.1.1"
+    "@sylphx/silk": "^1.2.0"
   },
   "devDependencies": {
     "@sylphx/silk": "workspace:*",

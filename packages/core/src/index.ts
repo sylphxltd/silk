@@ -3,31 +3,20 @@
  * Zero-codegen, type-safe CSS-in-TS with build-time extraction
  */
 
-// Core runtime
+// Core runtime (Browser-safe, ~500B gzipped)
 export { createStyleSystem, cssRules } from './runtime'
 export type { StyleSystem } from './runtime'
 
-// Production optimizations (with LightningCSS - 5-10x faster)
-export {
-  generateClassName,
-  generateShortClassName,
-  hashStyleId,
-  optimizeCSS,
-  optimizeCSSWithLightning,
-  smartOptimizeCSS,
-  resetShortNameCounter,
-  getShortNameCount,
-} from './production'
-export type { ProductionConfig, CSSOptimizationResult } from './production'
-
-// Atomic CSS Deduplication (10-20% smaller for large apps)
-export {
-  AtomicCSSRegistry,
-  getAtomicRegistry,
-  resetAtomicRegistry,
-  generateAtomicReport,
-} from './atomic'
-export type { AtomicCSSOptions } from './atomic'
+// NOTE: Build-time optimization tools have been moved to @sylphx/silk/optimizer
+// to prevent bundling Node.js-only code (lightningcss) in browser builds.
+//
+// Import them from:
+//   import { optimizeCSSWithLightning } from '@sylphx/silk/optimizer'
+//
+// This includes:
+//   - Production optimizations (LightningCSS)
+//   - Atomic CSS deduplication
+//   - Critical CSS extraction
 
 // Modern CSS Features (93% browser support)
 export {

@@ -1,5 +1,73 @@
 # @sylphx/silk
 
+## 1.2.0
+
+### Minor Changes
+
+- # Architecture Cleanup: Separate Build-Time Optimizer
+
+  ## 🏗️ Breaking Change: Import Path for Build Tools
+
+  Build-time optimization tools have been moved to a separate export path to prevent bundling Node.js-only code (lightningcss) in browser builds.
+
+  ### Migration Required for Build Tools
+
+  **Before (v1.1.x):**
+
+  ```typescript
+  import { optimizeCSSWithLightning } from "@sylphx/silk";
+  ```
+
+  **After (v1.2.0):**
+
+  ```typescript
+  import { optimizeCSSWithLightning } from "@sylphx/silk/optimizer";
+  ```
+
+  ### What Changed
+
+  **Moved to `@sylphx/silk/optimizer`:**
+
+  - `optimizeCSSWithLightning()`
+  - `smartOptimizeCSS()`
+  - `generateClassName()`
+  - `generateShortClassName()`
+  - `hashStyleId()`
+  - `optimizeCSS()`
+  - `AtomicCSSRegistry`
+  - `CriticalCSSExtractor`
+
+  **Stays in `@sylphx/silk`:**
+
+  - `createStyleSystem()` ✅
+  - `cssRules` ✅
+  - All runtime functions ✅
+  - All types ✅
+
+  ### Impact
+
+  **Most users:** ✅ No impact (browser code only imports runtime)
+
+  **Build tool authors:** ⚠️ Update imports to use `@sylphx/silk/optimizer`
+
+  ### Benefits
+
+  ✅ Cleaner architecture - browser bundles don't include Node.js-only code
+  ✅ Fixes lightningcss bundling issues
+  ✅ Smaller browser bundles
+  ✅ Clear separation: runtime vs build-time tools
+
+  ### Example: Vite Plugin
+
+  ```typescript
+  // vite-plugin/src/index.ts
+  import { cssRules } from "@sylphx/silk"; // ✅ Still works (runtime)
+  // No changes needed!
+
+  // If using optimization:
+  import { optimizeCSSWithLightning } from "@sylphx/silk/optimizer"; // ✅ New path
+  ```
+
 ## 1.1.1
 
 ### Patch Changes

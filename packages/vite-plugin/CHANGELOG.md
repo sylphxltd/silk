@@ -1,5 +1,12 @@
 # @sylphx/silk-vite-plugin
 
+## 1.1.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @sylphx/silk@1.2.0
+
 ## 1.1.1
 
 ### Patch Changes
