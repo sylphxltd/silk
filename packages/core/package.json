@@ -1,7 +1,7 @@
 {
   "name": "@sylphx/zencss",
-  "version": "0.1.0",
-  "description": "Type-safe CSS-in-TypeScript without codegen. 38-2100% smaller bundles than Tailwind and Panda CSS.",
+  "version": "0.2.0",
+  "description": "Type-safe CSS-in-TypeScript without codegen. 45-65% smaller CSS in production with modern color functions (oklch, color-mix) and native nesting.",
   "keywords": [
     "css",
     "css-in-js",
