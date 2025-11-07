@@ -362,6 +362,8 @@ bun add @sylphx/silk-nextjs     # Next.js App Router & RSC
 bun add @sylphx/silk-remix      # Remix Streaming SSR
 bun add @sylphx/silk-astro      # Astro Islands Architecture
 bun add @sylphx/silk-solid      # Solid.js Fine-Grained Reactivity
+bun add @sylphx/silk-vue        # Vue 3 Composition API
+bun add @sylphx/silk-svelte     # Svelte Reactive Stores
 
 # Other package managers
 npm install @sylphx/silk-react
@@ -478,18 +480,82 @@ export const { styled, Box, css } = createSilkSolid(config)
 
 [View Full Solid.js Documentation →](./packages/solid-bindings/README.md)
 
+### 🎨 Vue 3 - Composition API & Reactivity
+
+```bash
+bun add @sylphx/silk-vue
+```
+
+**Features:**
+- ✅ Full Composition API support with reactive style props
+- ✅ `<script setup>` syntax support
+- ✅ Type-safe design tokens
+- ✅ Nuxt 3 compatible
+
+```vue
+<script setup lang="ts">
+import { createSilkVue } from '@sylphx/silk-vue'
+
+export const { styled, Box, css } = createSilkVue(config)
+
+const Button = styled('button', {
+  bg: 'brand.500',
+  px: 4,
+  py: 2
+})
+</script>
+
+<template>
+  <Button>Click me</Button>
+</template>
+```
+
+[View Full Vue Documentation →](./packages/vue-bindings/README.md)
+
+### 🔥 Svelte - Reactive Stores & Minimal Re-renders
+
+```bash
+bun add @sylphx/silk-svelte
+```
+
+**Features:**
+- ✅ Perfect integration with Svelte's reactivity
+- ✅ Minimal re-renders with Svelte's compiler
+- ✅ Reactive stores support
+- ✅ SvelteKit ready
+
+```svelte
+<script lang="ts">
+  import { css } from './silk.config'
+
+  const button = css({
+    bg: 'brand.500',
+    px: 4,
+    py: 2
+  })
+</script>
+
+<button class={button}>
+  Click me
+</button>
+```
+
+[View Full Svelte Documentation →](./packages/svelte-bindings/README.md)
+
 ### 📊 Framework Integration Comparison
 
-| Feature | Next.js | Remix | Astro | Solid |
-|---------|---------|-------|-------|-------|
-| **App Router** | ✅ | N/A | N/A | N/A |
-| **RSC** | ✅ | N/A | N/A | N/A |
-| **Streaming SSR** | ✅ | ✅ | N/A | ✅ |
-| **Islands** | N/A | N/A | ✅ | N/A |
-| **Critical CSS** | ✅ | ✅ | ✅ | N/A |
-| **Brotli** | ✅ | ✅ | ✅ | ✅ |
-| **Zero Runtime** | ✅ | ✅ | ✅ | ✅ |
-| **Bundle Size** | **500B** | **500B** | **500B** | **500B** |
+| Feature | Next.js | Remix | Astro | Solid | Vue | Svelte |
+|---------|---------|-------|-------|-------|-----|--------|
+| **App Router** | ✅ | N/A | N/A | N/A | N/A | N/A |
+| **RSC** | ✅ | N/A | N/A | N/A | N/A | N/A |
+| **Streaming SSR** | ✅ | ✅ | N/A | ✅ | N/A | N/A |
+| **Islands** | N/A | N/A | ✅ | N/A | N/A | N/A |
+| **Composition API** | N/A | N/A | N/A | N/A | ✅ | N/A |
+| **Reactive Stores** | N/A | N/A | N/A | N/A | ✅ | ✅ |
+| **Critical CSS** | ✅ | ✅ | ✅ | N/A | N/A | N/A |
+| **Brotli** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Zero Runtime** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Bundle Size** | **500B** | **500B** | **500B** | **500B** | **500B** | **500B** |
 
 **All integrations maintain Silk's industry-leading 500B gzipped bundle size** with framework-specific optimizations.
 
@@ -1119,7 +1185,7 @@ bun test --run benchmark.bench.ts
 
 ## Roadmap
 
-**Completed (v1.2.0):**
+**Completed (v1.2.1):**
 - ✅ Zero codegen with full type inference
 - ✅ Intelligent CSS optimization (20-40% reduction)
 - ✅ Critical CSS extraction (unique feature)
@@ -1127,7 +1193,7 @@ bun test --run benchmark.bench.ts
 - ✅ Performance monitoring and analytics
 - ✅ Cascade layers (@layer) and :where() selector
 - ✅ Comprehensive benchmarking vs Tailwind/Panda
-- ✅ **Framework integrations (Next.js, Remix, Astro, Solid.js)**
+- ✅ **Framework integrations (Next.js, Remix, Astro, Solid.js, Vue, Svelte)**
 - ✅ **LightningCSS integration (5-10x faster builds)**
 - ✅ **Brotli pre-compression (15-25% smaller)**
 - ✅ **Atomic CSS deduplication (10-20% smaller)**
@@ -1135,7 +1201,7 @@ bun test --run benchmark.bench.ts
 - ✅ **Runtime optimizations (2-3x faster)**
 
 **Planned:**
-- Framework adapters (Vue, Svelte, Qwik)
+- Framework adapters (Qwik, Preact, Alpine.js)
 - Recipes and variants API
 - Responsive utilities
 - Animation utilities
