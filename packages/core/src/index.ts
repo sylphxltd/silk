@@ -137,3 +137,11 @@ export {
   Benchmarker,
 } from './performance'
 export type { PerformanceMetrics, BuildReport } from './performance'
+
+// Benchmarking
+export {
+  BenchmarkRunner,
+  BENCHMARK_SCENARIOS,
+  generateMockCSS,
+} from './benchmark'
+export type { BenchmarkMetrics, BenchmarkScenario } from './benchmark'
