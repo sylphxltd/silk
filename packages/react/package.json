@@ -1,6 +1,25 @@
 {
-  "name": "@zencss/react",
-  "version": "0.0.1",
+  "name": "@sylphx/zencss-react",
+  "version": "0.0.2",
+  "description": "React integration for ZenCSS - Type-safe CSS-in-TypeScript",
+  "keywords": [
+    "zencss",
+    "react",
+    "css-in-js",
+    "typescript",
+    "styled-components"
+  ],
+  "author": "SylphX Ltd",
+  "license": "MIT",
+  "homepage": "https://sylphx.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sylphxltd/zencss.git",
+    "directory": "packages/react"
+  },
+  "bugs": {
+    "url": "https://github.com/sylphxltd/zencss/issues"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,12 +29,18 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "prepublishOnly": "bun run build"
   },
   "dependencies": {
-    "@zencss/core": "workspace:*"
+    "@sylphx/zencss": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
@@ -25,5 +50,8 @@
   },
   "peerDependencies": {
     "react": "^18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

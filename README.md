@@ -56,22 +56,22 @@ ZenCSS is a **high-performance** CSS-in-TypeScript library that delivers **indus
 
 ```bash
 # Using bun (recommended)
-bun add @zencss/core
+bun add @sylphx/zencss
 
 # Using npm
-npm install @zencss/core
+npm install @sylphx/zencss
 
 # Using pnpm
-pnpm add @zencss/core
+pnpm add @sylphx/zencss
 
 # Using yarn
-yarn add @zencss/core
+yarn add @sylphx/zencss
 ```
 
 ## Quick Start
 
 ```typescript
-import { defineConfig, createStyleSystem } from '@zencss/core'
+import { defineConfig, createStyleSystem } from '@sylphx/zencss'
 
 const config = defineConfig({
   colors: {
@@ -127,7 +127,7 @@ css({ color: 'red.600' })  // ❌ TypeScript error
 **Unique to ZenCSS** - automatic critical CSS extraction for 30-50% faster first paint:
 
 ```typescript
-import { CriticalCSSExtractor } from '@zencss/core'
+import { CriticalCSSExtractor } from '@sylphx/zencss'
 
 const extractor = new CriticalCSSExtractor({ enabled: true })
 
@@ -153,7 +153,7 @@ const inlineCSS = extractor.generateInlineHTML(critical)
 Built-in all-in-one optimizer for 50-90% size reduction:
 
 ```typescript
-import { ProductionOptimizer } from '@zencss/core'
+import { ProductionOptimizer } from '@sylphx/zencss'
 
 const optimizer = new ProductionOptimizer({
   enabled: true,
@@ -187,7 +187,7 @@ console.log(result.stats)
 **Cascade Layers (@layer):**
 
 ```typescript
-import { LayerManager } from '@zencss/core'
+import { LayerManager } from '@sylphx/zencss'
 
 const manager = new LayerManager({
   order: ['reset', 'base', 'tokens', 'utilities', 'overrides']
@@ -205,7 +205,7 @@ const css = manager.generateCSS()
 **Zero Specificity with :where():**
 
 ```typescript
-import { wrapInWhere, calculateSpecificity } from '@zencss/core'
+import { wrapInWhere, calculateSpecificity } from '@sylphx/zencss'
 
 wrapInWhere('.btn')  // => ':where(.btn)'
 
@@ -223,7 +223,7 @@ calculateSpecificity('.btn')          // [0, 0, 1, 0] - Normal specificity
 Built-in analytics for tracking build performance:
 
 ```typescript
-import { PerformanceMonitor } from '@zencss/core'
+import { PerformanceMonitor } from '@sylphx/zencss'
 
 const monitor = new PerformanceMonitor()
 monitor.startBuild()
@@ -301,7 +301,7 @@ resetCSSRules()
 #### `ProductionOptimizer`
 
 ```typescript
-import { ProductionOptimizer } from '@zencss/core'
+import { ProductionOptimizer } from '@sylphx/zencss'
 
 const optimizer = new ProductionOptimizer({
   enabled: true,
@@ -318,7 +318,7 @@ const result = await optimizer.optimize(css, rootDir)
 #### `CriticalCSSExtractor`
 
 ```typescript
-import { CriticalCSSExtractor } from '@zencss/core'
+import { CriticalCSSExtractor } from '@sylphx/zencss'
 
 const extractor = new CriticalCSSExtractor({ enabled: true })
 extractor.autoDetect(css)
@@ -329,7 +329,7 @@ const { critical, nonCritical } = extractor.extract(css)
 #### `ClassUsageTracker`
 
 ```typescript
-import { ClassUsageTracker } from '@zencss/core'
+import { ClassUsageTracker } from '@sylphx/zencss'
 
 const tracker = new ClassUsageTracker()
 await tracker.scan('./src')
@@ -340,7 +340,7 @@ console.log(tracker.getStats())
 ### React Integration
 
 ```typescript
-import { createReactStyleSystem } from '@zencss/react'
+import { createReactStyleSystem } from '@sylphx/zencss-react'
 import { css } from './zen.config'
 
 const { styled, Box, Flex, Text } = createReactStyleSystem(css)
