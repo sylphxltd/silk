@@ -6,10 +6,16 @@
 
 [![Bundle Size](https://img.shields.io/badge/bundle-228B%20gzipped-success)](./BENCHMARK_RESULTS.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue)](.)
-[![Tests](https://img.shields.io/badge/tests-349%20passing-brightgreen)](.)
+[![Tests](https://img.shields.io/badge/tests-460%20passing-brightgreen)](.)
 [![License](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 
-**38-2100% smaller bundles** • **Zero runtime** • **Full type safety** • **Critical CSS extraction**
+**45-65% smaller CSS** • **Modern CSS** • **Zero runtime** • **Full type safety** • **Critical CSS**
+
+### ✨ What's New in v0.2.0
+
+🚀 **Production Optimizations** • 🎨 **Modern Color Functions (oklch, color-mix)** • 📦 **Native CSS Nesting** • 🏗️ **@layer Architecture** • 🔥 **mergeStyles API**
+
+[View Full Changelog →](./CHANGELOG.md#020---2025-01-xx)
 
 </div>
 
@@ -23,12 +29,21 @@ ZenCSS is a **high-performance** CSS-in-TypeScript library that delivers **indus
 
 ## ⚡ Why ZenCSS?
 
-### **Unmatched Bundle Sizes**
-- 📦 **38-2100% smaller** than Tailwind and Panda CSS
-- 🔥 **228B gzipped** for large apps (vs 4.6KB Tailwind, 5.0KB Panda)
-- ⚡ **50-90% size reduction** through production optimizer
-- 💨 **30-50% faster first paint** with critical CSS extraction
-- 🎯 **Only framework with critical CSS** - unique competitive advantage
+### **🚀 v0.2.0: Production Optimizations**
+- 📦 **45-65% smaller CSS** in production (new in v0.2.0!)
+  - Short hashed class names: `a0, a1, ...` (30-40% reduction)
+  - CSS optimization pipeline (10-15% reduction)
+  - Native CSS nesting (5-10% reduction)
+- 🎨 **Modern Color Functions** (new in v0.2.0!)
+  - `oklch()`, `lch()`, `lab()` - Perceptually uniform colors
+  - `colorMix()` - Native browser color mixing (zero runtime)
+  - 92% browser support, production-ready
+- 🏗️ **@layer Architecture** (new in v0.2.0!)
+  - Predictable CSS specificity without `!important`
+  - Automatic layer organization
+- 🔥 **mergeStyles API** (new in v0.2.0!)
+  - Type-safe style composition
+  - Compound variants with defaults
 
 ### **Developer Experience**
 - 🎯 **Strict Type Safety** - Only design tokens allowed, compile-time validation
@@ -36,7 +51,7 @@ ZenCSS is a **high-performance** CSS-in-TypeScript library that delivers **indus
 - 🚀 **Zero Runtime** - CSS extracted at build time, 0 bytes overhead
 - 🔒 **Design System Enforcement** - Invalid tokens caught at compile time
 - 📊 **Performance Monitoring** - Built-in build analytics
-- 🌲 **Modern CSS** - @layer support, :where() selector, zero specificity
+- 🌲 **Modern CSS** - Native nesting, @layer, :where(), container queries
 
 ### **Feature Comparison**
 
@@ -46,12 +61,138 @@ ZenCSS is a **high-performance** CSS-in-TypeScript library that delivers **indus
 | **Type Inference** | ✅ | ❌ | ✅ |
 | **No Codegen** | ✅ | ✅ | ❌ |
 | **Critical CSS** | **✅ Unique** | ❌ | ❌ |
+| **Modern Colors (oklch)** | **✅** | ❌ | ❌ |
+| **Native CSS Nesting** | **✅** | ✅ (v4+) | ❌ |
 | **Performance Monitoring** | **✅ Unique** | ❌ | ❌ |
 | **@layer Support** | ✅ | ✅ (v4+) | ✅ |
 | **:where() Selector** | ✅ | ✅ (v4+) | ✅ |
 | **Tree Shaking** | ✅ | ✅ | ✅ |
 
-**ZenCSS is the only framework that combines type safety, zero codegen, and critical CSS extraction.**
+**ZenCSS is the only framework that combines type safety, zero codegen, critical CSS extraction, and modern color functions.**
+
+---
+
+## 🎨 v0.2.0 Feature Showcase
+
+### Production Optimizations
+
+```typescript
+import { createStyleSystem } from '@sylphx/zencss'
+
+const { css, getCSSRules } = createStyleSystem(config, {
+  // Enable production optimizations
+  production: true,        // Short hashed class names (a0, a1, ...)
+  shortClassNames: true,   // 30-40% smaller CSS
+  minify: true,            // Remove whitespace
+  optimizeCSS: true,       // Property deduplication, color optimization
+})
+
+// Development: .zen-color-brand-500 { color: #3b82f6; }
+// Production:  .a0 { color: #3b82f6; }
+```
+
+### Modern Color Functions
+
+```typescript
+import { oklch, colorMix, lighten, darken, generatePalette } from '@sylphx/zencss'
+
+// Perceptually uniform colors (better than HSL/RGB)
+const blue = oklch(0.7, 0.2, 250)
+
+// Native browser color mixing (zero runtime cost!)
+const accent = colorMix('blue', 'red', 60)
+const light = lighten('blue', 20)
+const dark = darken('blue', 30)
+
+// Generate complete color palettes
+const palette = generatePalette({ hue: 250, chroma: 0.2 })
+// Returns: { 50: 'oklch(...)', ..., 950: 'oklch(...)' }
+```
+
+### Style Composition API
+
+```typescript
+import { mergeStyles, createVariant, createCompoundVariant } from '@sylphx/zencss'
+
+// Merge multiple style objects
+const styles = mergeStyles(
+  { px: 6, py: 3 },
+  { bg: 'brand.500' },
+  isLarge && { px: 8, py: 4 }
+)
+
+// Create variants
+const buttonVariant = createVariant({
+  primary: { bg: 'brand.500', color: 'white' },
+  secondary: { bg: 'gray.200', color: 'gray.900' },
+})
+
+// Compound variants (multi-dimensional)
+const buttonStyle = createCompoundVariant({
+  variants: {
+    color: {
+      primary: { bg: 'brand.500' },
+      secondary: { bg: 'gray.200' },
+    },
+    size: {
+      sm: { px: 4, py: 2 },
+      lg: { px: 8, py: 4 },
+    },
+  },
+  compoundVariants: [
+    {
+      when: { color: 'primary', size: 'lg' },
+      style: { shadow: 'lg' }, // Special styling for large primary buttons
+    },
+  ],
+  defaultVariants: {
+    color: 'primary',
+    size: 'sm',
+  },
+})
+```
+
+### Native CSS Nesting
+
+```typescript
+import { generateNestedCSS } from '@sylphx/zencss'
+
+// Generate modern nested CSS
+const css = generateNestedCSS(
+  '.btn',
+  { color: 'blue', padding: '10px' },
+  {
+    '&:hover': { color: 'red' },
+    '&:focus': { outline: '2px solid blue' },
+  }
+)
+
+// Output:
+// .btn {
+//   color: blue;
+//   padding: 10px;
+//   &:hover { color: red; }
+//   &:focus { outline: 2px solid blue; }
+// }
+```
+
+### @layer Architecture
+
+```typescript
+const { css, getCSSRules } = createStyleSystem(config, {
+  // Enable cascade layers
+  enabled: true,
+  order: ['reset', 'base', 'tokens', 'recipes', 'utilities'],
+})
+
+// Automatic layer organization:
+// @layer reset, base, tokens, recipes, utilities;
+//
+// @layer base { /* base styles */ }
+// @layer utilities { /* utility classes - highest priority */ }
+```
+
+**All features are production-ready with 87-100% browser support. See [OPTIMIZATIONS.md](./OPTIMIZATIONS.md) for detailed documentation.**
 
 ## Installation
 
