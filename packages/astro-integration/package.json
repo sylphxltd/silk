@@ -1,6 +1,6 @@
 {
   "name": "@sylphx/silk-astro",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Astro integration for Silk - zero-runtime CSS-in-TypeScript with islands architecture support",
   "keywords": [
     "css",
@@ -48,9 +48,9 @@
     "astro": "^3.0.0 || ^4.0.0"
   },
   "dependencies": {
-    "@sylphx/silk": "workspace:*",
-    "@sylphx/silk-react": "workspace:*",
-    "@sylphx/silk-vite-plugin": "workspace:*"
+    "@sylphx/silk": "^2.0.0",
+    "@sylphx/silk-react": "^2.0.1",
+    "@sylphx/silk-vite-plugin": "^2.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

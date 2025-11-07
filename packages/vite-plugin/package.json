@@ -1,6 +1,6 @@
 {
   "name": "@sylphx/silk-vite-plugin",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Vite plugin for Silk - Build-time CSS extraction with production optimizations",
   "keywords": [
     "silk",
@@ -43,8 +43,8 @@
     "@babel/core": "^7.23.0",
     "@babel/preset-react": "^7.23.0",
     "@babel/preset-typescript": "^7.23.0",
-    "@sylphx/babel-plugin-silk": "workspace:*",
-    "@sylphx/silk": "workspace:*",
+    "@sylphx/babel-plugin-silk": "^2.0.0",
+    "@sylphx/silk": "^2.0.0",
     "unplugin": "^2.3.10"
   },
   "devDependencies": {

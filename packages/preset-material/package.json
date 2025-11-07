@@ -47,7 +47,7 @@
     "@sylphx/silk": "^1.2.0"
   },
   "devDependencies": {
-    "@sylphx/silk": "workspace:*",
+    "@sylphx/silk": "^2.0.0",
     "@types/node": "^20.0.0",
     "typescript": "^5.3.0"
   },

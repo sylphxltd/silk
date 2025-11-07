@@ -1,5 +1,13 @@
 # @sylphx/silk-react
 
+## 2.0.1
+
+### Patch Changes
+
+- Fix workspace:\* dependencies in published packages
+
+  Resolves workspace protocol dependencies to actual version numbers for npm registry compatibility.
+
 ## 1.0.3
 
 ### Patch Changes

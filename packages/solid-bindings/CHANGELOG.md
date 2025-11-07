@@ -1,5 +1,16 @@
 # @sylphx/silk-solid
 
+## 2.0.4
+
+### Patch Changes
+
+- Fix workspace:\* dependencies in published packages
+
+  Resolves workspace protocol dependencies to actual version numbers for npm registry compatibility.
+
+- Updated dependencies
+  - @sylphx/silk-vite-plugin@2.0.1
+
 ## 2.0.2
 
 ### Patch Changes

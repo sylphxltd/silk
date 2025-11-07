@@ -1,6 +1,6 @@
 {
   "name": "@sylphx/silk-solid",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Solid.js bindings for Silk - zero-runtime CSS-in-TypeScript with fine-grained reactivity",
   "keywords": [
     "css",
@@ -52,8 +52,8 @@
     "solid-js": "^1.7.0"
   },
   "dependencies": {
-    "@sylphx/silk": "workspace:*",
-    "@sylphx/silk-vite-plugin": "workspace:*"
+    "@sylphx/silk": "^2.0.0",
+    "@sylphx/silk-vite-plugin": "^2.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

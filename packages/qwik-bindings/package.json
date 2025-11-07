@@ -1,6 +1,6 @@
 {
   "name": "@sylphx/silk-qwik",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Qwik bindings for Silk - zero-runtime CSS-in-TypeScript with resumability",
   "keywords": [
     "css",
@@ -52,8 +52,8 @@
     "@builder.io/qwik": "^1.0.0"
   },
   "dependencies": {
-    "@sylphx/silk": "workspace:*",
-    "@sylphx/silk-vite-plugin": "workspace:*"
+    "@sylphx/silk": "^2.0.0",
+    "@sylphx/silk-vite-plugin": "^2.0.1"
   },
   "devDependencies": {
     "@builder.io/qwik": "^1.5.0",
