@@ -9,22 +9,24 @@
 type LightningCSS = typeof import('lightningcss')
 let lightningcss: LightningCSS | null = null
 
-// Lazy load lightningcss only when needed (Node.js environment)
+// Lazy load lightningcss only when needed (server environments: Node.js, Bun, Deno)
 async function loadLightningCSS(): Promise<LightningCSS | null> {
   if (lightningcss) return lightningcss
 
-  // Check if we're in Node.js environment
-  if (typeof process !== 'undefined' && process.versions?.node) {
+  // Check if we're in a server environment (not browser)
+  // Browser has 'window', server environments don't
+  if (typeof window === 'undefined') {
     try {
       lightningcss = await import('lightningcss')
       return lightningcss
     } catch (error) {
-      // LightningCSS not available (development without devDependencies)
+      // LightningCSS not available or not compatible with runtime
+      // Automatically falls back to manual optimization
       return null
     }
   }
 
-  // Browser environment - lightningcss cannot run
+  // Browser environment - lightningcss cannot run (native addons need Node.js/Bun)
   return null
 }
 
