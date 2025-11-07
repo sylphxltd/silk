@@ -143,6 +143,26 @@ export {
 } from './nesting'
 export type { NestingConfig } from './nesting'
 
+// Modern CSS Color Functions
+export {
+  oklch,
+  lch,
+  lab,
+  hwb,
+  colorMix,
+  lighten,
+  darken,
+  alpha,
+  parseOKLCH,
+  isModernColorFunction,
+  areModernColorsSupported,
+  generatePalette,
+  createColorScale,
+  hexToOKLCH,
+  defaultColorConfig,
+} from './colors'
+export type { ColorConfig, OKLCHColor, ColorMixOptions, ColorPaletteOptions } from './colors'
+
 // Tree Shaking & Dead Code Elimination (types only - implementations use Node.js APIs)
 export type { TreeShakingConfig } from './tree-shaking'
 
