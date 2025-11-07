@@ -203,7 +203,7 @@ export function groupRulesBySelector(rules: string[]): Map<
  */
 function parseRule(rule: string): { selector: string; declarations: Record<string, string> } | null {
   const match = rule.match(/^([^{]+)\{([^}]+)\}/)
-  if (!match) return null
+  if (!match || !match[1] || !match[2]) return null
 
   const selector = match[1].trim()
   const declarationsStr = match[2].trim()

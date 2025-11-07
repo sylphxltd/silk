@@ -184,9 +184,9 @@ export function parseOKLCH(color: string): OKLCHColor | null {
   if (!match) return null
 
   return {
-    l: Number.parseFloat(match[1]),
-    c: Number.parseFloat(match[2]),
-    h: Number.parseFloat(match[3]),
+    l: Number.parseFloat(match[1] ?? '0'),
+    c: Number.parseFloat(match[2] ?? '0'),
+    h: Number.parseFloat(match[3] ?? '0'),
     alpha: match[4] ? Number.parseFloat(match[4]) : undefined,
   }
 }

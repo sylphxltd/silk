@@ -159,8 +159,9 @@ export function createCompoundVariant<
       if (!value) continue
 
       const variantGroup = config.variants[dimension]
-      if (variantGroup && value in variantGroup) {
-        styles.push(variantGroup[value as string])
+      const variantStyle = variantGroup?.[value as string]
+      if (variantStyle) {
+        styles.push(variantStyle)
       }
     }
 
