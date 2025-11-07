@@ -6,6 +6,13 @@
 
 import type { DesignConfig, TypedStyleProps, StyleObject } from './types'
 import { getMinimalProps } from './optimizer'
+import { LayerManager, type LayerConfig, type CascadeLayer, classifyLayer } from './layers'
+import {
+  type SelectorConfig,
+  generateSelector,
+  wrapInWhere,
+  ClassNameGenerator,
+} from './selectors'
 
 // CSS rule storage for build-time extraction
 export const cssRules = new Map<string, string>()

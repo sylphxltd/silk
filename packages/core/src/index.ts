@@ -85,3 +85,29 @@ export {
   transitionPresets,
   easingFunctions,
 } from './animations'
+
+// Cascade Layers (@layer)
+export {
+  classifyLayer,
+  generateLayerDefinition,
+  wrapInLayer,
+  organizeByLayers,
+  LayerManager,
+  defaultLayerConfig,
+} from './layers'
+export type { CascadeLayer, LayerConfig } from './layers'
+
+// Selector Optimization (:where)
+export {
+  wrapInWhere,
+  generateSelector,
+  calculateSpecificity,
+  compareSpecificity,
+  optimizeSelector,
+  extractClassNames,
+  hasPseudo,
+  minifyClassName,
+  ClassNameGenerator,
+  defaultSelectorConfig,
+} from './selectors'
+export type { SelectorConfig } from './selectors'
