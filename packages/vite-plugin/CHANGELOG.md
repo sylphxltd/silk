@@ -1,5 +1,11 @@
 # @sylphx/silk-vite-plugin
 
+## 2.0.2
+
+### Patch Changes
+
+- Fix workspace dependencies - replace workspace:\* with actual versions
+
 ## 2.0.1
 
 ### Patch Changes

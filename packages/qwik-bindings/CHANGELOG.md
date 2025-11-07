@@ -1,5 +1,13 @@
 # @sylphx/silk-qwik
 
+## 2.0.5
+
+### Patch Changes
+
+- Fix workspace dependencies - replace workspace:\* with actual versions
+- Updated dependencies
+  - @sylphx/silk-vite-plugin@2.0.2
+
 ## 2.0.4
 
 ### Patch Changes

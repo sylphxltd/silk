@@ -1,6 +1,6 @@
 {
   "name": "@sylphx/silk-svelte",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Svelte bindings for Silk - zero-runtime CSS-in-TypeScript with reactive stores",
   "keywords": [
     "css",
@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "@sylphx/silk": "^2.0.0",
-    "@sylphx/silk-vite-plugin": "^2.0.1"
+    "@sylphx/silk-vite-plugin": "^2.0.2"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
