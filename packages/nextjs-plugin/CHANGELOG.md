@@ -1,5 +1,26 @@
 # @sylphx/silk-nextjs
 
+## 3.0.3
+
+### Patch Changes
+
+- Fix root-level app/ directory support and webpack client bundling
+
+  **Fixed:**
+
+  - srcDir parameter now works correctly (was being passed but webpack externals were missing)
+  - lightningcss-wasm no longer bundled to client-side code (prevents 'child_process' errors)
+  - Added debug logging to show configured srcDir
+
+  **Breaking:** None - this is a bug fix
+
+  **Migration:**
+  If you have a root-level `app/` directory, configure:
+
+  ```javascript
+  withSilk({}, { srcDir: "./app" });
+  ```
+
 ## 3.0.1
 
 ### Patch Changes

@@ -110,6 +110,21 @@ export function withSilk(
       if (debug) {
         console.log('[Silk] Webpack mode: Injecting SilkWebpackPlugin');
         console.log('[Silk] isServer:', options.isServer);
+        console.log('[Silk] srcDir:', srcDir);
+      }
+
+      // Prevent Node.js-only dependencies from being bundled to client
+      if (!options.isServer) {
+        config.externals = config.externals || [];
+        const externalsArray = Array.isArray(config.externals) ? config.externals : [config.externals];
+        externalsArray.push({
+          'lightningcss-wasm': 'commonjs lightningcss-wasm'
+        });
+        config.externals = externalsArray;
+
+        if (debug) {
+          console.log('[Silk] Added lightningcss-wasm to client externals');
+        }
       }
 
       // Add SilkWebpackPlugin (to both client and server builds)
