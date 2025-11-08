@@ -73,11 +73,9 @@ export default class SilkWebpackPlugin {
       debug: false,
       ...options
     };
-    console.log('[Silk] Plugin constructed with options:', this.options);
   }
 
   apply(compiler: Compiler): void {
-    console.log('[Silk] Plugin apply() called');
     const {
       srcDir,
       virtualModuleId,
@@ -88,7 +86,6 @@ export default class SilkWebpackPlugin {
     const virtualModulePath = `node_modules/${virtualModuleId}`;
     const isProduction = compiler.options.mode === 'production';
 
-    console.log(`[Silk] virtualModulePath: ${virtualModulePath}`);
     if (debug) {
       console.log(`[Silk] Mode: ${isProduction ? 'production' : 'development'}`);
       console.log(`[Silk] Scanning: ${srcDir}`);
