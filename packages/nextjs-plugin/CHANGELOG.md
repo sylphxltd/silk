@@ -1,5 +1,17 @@
 # @sylphx/silk-nextjs
 
+## 2.2.1
+
+### Patch Changes
+
+- 6a4a4dc: Add automatic Turbopack support with SWC plugin
+
+  - Add `@sylphx/swc-plugin-silk` as optional peer dependency
+  - Automatic detection of Turbopack mode (already implemented in code)
+  - No configuration changes needed - works automatically
+  - Falls back to Babel if SWC plugin not installed
+  - Update documentation to clarify Turbopack support
+
 ## 2.2.0
 
 ### Minor Changes
