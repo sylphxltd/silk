@@ -19,6 +19,7 @@ import { withSilk } from '@sylphx/silk-nextjs';
 export default withSilk({
   // Your Next.js config
 });
+// Auto-detects Turbopack mode (recommended)
 ```
 
 ### 2. Import Silk CSS in your root layout
@@ -112,70 +113,80 @@ my-app/
 
 ## Build Modes
 
-### Turbopack (Recommended)
+Silk **automatically adapts** to whatever Next.js is using:
+- ✅ `next dev` / `next build` → **Webpack mode** (zero-codegen, virtual CSS)
+- ✅ `next dev --turbo` / `next build --turbo` → **Turbopack mode** (CLI-based)
 
-Faster builds with CLI-based generation:
+No configuration needed! Silk detects at runtime which bundler Next.js is actually using.
+
+### Webpack Mode (Auto-enabled)
+
+When you run `next dev` or `next build`, Silk automatically uses webpack mode:
+
+```javascript
+// next.config.mjs
+import { withSilk } from '@sylphx/silk-nextjs';
+
+export default withSilk({
+  // Your Next.js config
+});
+```
+
+```typescript
+// app/layout.tsx
+import 'silk.css';  // ✅ Virtual CSS module (auto-generated)
+```
+
+```bash
+next dev          # Silk auto-injects webpack plugin
+next build        # Works automatically
+```
+
+**Pros:**
+- ✅ Zero-codegen (no CLI needed)
+- ✅ Automatic CSS regeneration on file changes
+- ✅ Zero setup
+
+### Turbopack Mode (Auto-enabled)
+
+When you run `next dev --turbo`, Silk expects CLI-generated CSS:
+
+```bash
+npm install -D @sylphx/silk-cli
+```
 
 ```json
 // package.json
 {
   "scripts": {
-    "predev": "silk generate --src ./app",
-    "dev": "next dev --turbo"
+    "predev": "silk generate --src ./src",
+    "prebuild": "silk generate --src ./src",
+    "dev": "next dev --turbo",
+    "build": "next build --turbo"
   }
 }
 ```
 
 ```javascript
 // next.config.mjs
-export default withSilk({}, {
-  turbopack: true,
-  srcDir: './app'
+import { withSilk } from '@sylphx/silk-nextjs';
+
+export default withSilk({
+  // Same config! Auto-detects turbopack
 });
 ```
 
 ```typescript
 // app/layout.tsx
-import '../app/silk.generated.css';  // Physical file
+import '../src/silk.generated.css';  // ✅ CLI-generated file
 ```
 
 **Pros:**
 - ✅ **10x faster builds** (Turbopack vs Webpack)
 - ✅ Future of Next.js (Vercel's focus)
-- ✅ Universal WASM optimization (works everywhere)
+- ✅ Universal WASM optimization
 
-**Note:** Requires running `silk generate` before dev/build (automated via `predev`/`prebuild` scripts)
-
-### Webpack
-
-Zero-codegen with virtual CSS modules:
-
-```bash
-next dev          # Development
-next build        # Production
-```
-
-```javascript
-// next.config.mjs
-export default withSilk({
-  // Next.js config
-});
-// Webpack mode is default (no turbopack: true)
-```
-
-```typescript
-// app/layout.tsx
-import 'silk.css';  // Virtual CSS module
-```
-
-**Pros:**
-- ✅ Zero-codegen (no CLI needed)
-- ✅ Automatic CSS regeneration on file changes
-- ✅ Simpler setup
-
-**Cons:**
-- ⚠️ Slower builds than Turbopack
-- ⚠️ Webpack is being phased out by Next.js team
+**Note:** Requires `@sylphx/silk-cli` and package.json scripts
 
 ## Compatibility
 

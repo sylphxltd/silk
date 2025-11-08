@@ -18,13 +18,19 @@ const __dirname = path.dirname(__filename);
 
 export interface SilkNextConfig extends SilkWebpackPluginOptions {
   /**
-   * Enable Turbopack mode (experimental)
+   * Build mode selection
    *
-   * Note: Turbopack mode requires semi-codegen:
-   * 1. Run: silk generate
-   * 2. Import: import '../src/silk.generated.css'
+   * - undefined (default): Auto-detect
+   *   - If you have custom webpack config → Webpack mode
+   *   - If no custom webpack config → Turbopack mode (recommended)
    *
-   * @default false
+   * - true: Force Turbopack mode (CLI-based, faster)
+   *   Requires: silk generate + import silk.generated.css
+   *
+   * - false: Force Webpack mode (zero-codegen, slower)
+   *   Uses: Virtual CSS modules, automatic regeneration
+   *
+   * @default undefined (auto-detect)
    */
   turbopack?: boolean;
 }
@@ -83,30 +89,38 @@ export function withSilk(
   silkConfig: SilkNextConfig = {}
 ): NextConfig {
   const {
-    turbopack: enableTurbopack = false,
+    turbopack: enableTurbopack,
     srcDir = './src',
     virtualModuleId = 'silk.css',
     debug = false,
     ...generateOptions
   } = silkConfig;
 
-  // Turbopack mode: User must use CLI tool
-  if (enableTurbopack) {
-    if (debug) {
-      console.log('[Silk] Turbopack mode enabled (semi-codegen)');
-      console.log('[Silk] Please run: silk generate');
-      console.log('[Silk] Then import: import "../src/silk.generated.css"');
-    }
+  // Strategy: Always provide webpack function
+  // - If webpack() is called by Next.js → Use webpack mode (virtual module)
+  // - If webpack() is NOT called → User is using Turbopack (expects generated CSS)
+  //
+  // This way, it automatically adapts to whatever Next.js is actually using:
+  // - `next dev` → calls webpack() → webpack mode works
+  // - `next dev --turbo` → doesn't call webpack() → turbopack mode (needs CLI)
 
-    // Return config as-is (no webpack modifications)
-    return nextConfig;
-  }
-
-  // Webpack mode: Inject SilkWebpackPlugin
   return {
     ...nextConfig,
 
     webpack(config: any, options: any) {
+      // If user explicitly disabled turbopack mode, skip auto-detection
+      if (enableTurbopack === true) {
+        if (debug) {
+          console.log('[Silk] Turbopack mode explicitly enabled, skipping webpack plugin');
+        }
+        // Call user's webpack config if exists
+        if (typeof nextConfig.webpack === 'function') {
+          return nextConfig.webpack(config, options);
+        }
+        return config;
+      }
+
+      // Webpack is being used by Next.js (this function was called)
       if (debug) {
         console.log('[Silk] Webpack mode: Injecting SilkWebpackPlugin');
         console.log('[Silk] isServer:', options.isServer);
