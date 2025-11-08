@@ -42,7 +42,7 @@ bun add @sylphx/silk-nextjs  # That's it!
 |-----------|--------|-------|
 | **Next.js** | ✅ Tested | `@sylphx/silk-nextjs` |
 | **Nuxt 3** | ✅ Ready | `@sylphx/silk-nuxt` |
-| **Vite + React/Vue/Svelte** | ✅ Tested | `@sylphx/silk-vite-plugin` |
+| **Vite + React/Vue/Svelte/Preact** | ✅ Tested | `@sylphx/silk-vite-plugin` |
 | **SvelteKit** | ✅ Ready | `@sylphx/silk-vite-plugin` |
 | **Astro** | ✅ Ready | `@sylphx/silk-vite-plugin` |
 | **Remix** | ✅ Ready | `@sylphx/silk-vite-plugin` |

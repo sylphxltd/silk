@@ -5,7 +5,7 @@
 **Date**: 2024-11-08
 **Version**: 1.0.0
 **Test Coverage**: 88.04%
-**Total Tests**: 473 (465 unit + 8 integration)
+**Total Tests**: 474 (465 unit + 9 integration)
 
 ---
 
@@ -13,7 +13,7 @@
 
 ### Code Quality
 - ✅ **88.04% test coverage** (465 unit tests passing)
-- ✅ **All 8 framework integration tests passing**
+- ✅ **All 9 framework integration tests passing**
 - ✅ **Zero test failures**
 - ✅ **TypeScript strict mode enabled**
 - ✅ **All packages building successfully**
@@ -22,6 +22,7 @@
 ### Framework Support
 - ✅ **Vite + React** - 407 bytes CSS
 - ✅ **Webpack** - 409 bytes CSS
+- ✅ **Preact + Vite** - 437 bytes CSS
 - ✅ **Next.js (webpack)** - 443 bytes CSS
 - ✅ **Next.js (turbopack)** - 446 bytes CSS (CLI mode)
 - ✅ **Vue 3 + Vite** - 447 bytes CSS
@@ -88,9 +89,10 @@
 - ✅ **Codegen** - 20 tests (new)
 - ✅ **Others** - 64 tests
 
-### Integration Tests: 8 tests
+### Integration Tests: 9 tests
 - ✅ Vite + React build verification
 - ✅ Webpack build verification
+- ✅ Preact + Vite build verification
 - ✅ Next.js (webpack) build verification
 - ✅ Next.js (turbopack) CLI verification
 - ✅ Vue 3 + Vite build verification
@@ -208,7 +210,7 @@ cd packages/core && bun test
 
 # 2. Run all framework integration tests
 cd test-builds && ./run-all-tests.sh
-# Expected: 8 passed, 0 failed, 0 skipped
+# Expected: 9 passed, 0 failed, 0 skipped
 
 # 3. Build all packages
 cd packages/core && bun run build
@@ -225,8 +227,8 @@ cd packages/webpack-plugin && bun run build
 ## ✅ Final Sign-Off
 
 **Code Review**: ✅ Complete
-**Testing**: ✅ 88% coverage, 473 tests passing
-**Framework Integration**: ✅ 8/8 frameworks working
+**Testing**: ✅ 88% coverage, 474 tests passing
+**Framework Integration**: ✅ 9/9 frameworks working
 **Documentation**: ✅ Complete
 **CI/CD**: ✅ Automated
 **Performance**: ✅ Optimized
@@ -243,8 +245,8 @@ cd packages/webpack-plugin && bun run build
 ## 🎉 Features
 
 - ✅ **Zero-codegen** CSS-in-TypeScript with virtual modules
-- ✅ **8 framework support**: React, Vue, Svelte, Next.js, Nuxt, and more
-- ✅ **88% test coverage** with 473 automated tests
+- ✅ **9 framework support**: React, Preact, Vue, Svelte, Next.js, Nuxt, and more
+- ✅ **88% test coverage** with 474 automated tests
 - ✅ **Production optimized** with minification, deduplication, tree-shaking
 - ✅ **Type-safe** design tokens and responsive utilities
 

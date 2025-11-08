@@ -208,6 +208,20 @@ test_framework 8 "SvelteKit (No-codegen)" "sveltekit-app" "npm run build" '
   fi
 '
 
+# Test 9: Preact + Vite (No-codegen)
+test_framework 9 "Preact + Vite (No-codegen)" "preact-vite-app" "npm run build" '
+  CSS_FILE=$(ls dist/assets/*.css 2>/dev/null | head -1)
+  if [ -n "$CSS_FILE" ]; then
+    CSS_SIZE=$(wc -c < "$CSS_FILE" | tr -d " ")
+    echo -e "${GREEN}  ✅ CSS generated: $(basename "$CSS_FILE") (${CSS_SIZE} bytes)${NC}"
+    echo -e "${GREEN}  ✅ Virtual module → Vite CSS pipeline${NC}"
+    return 0
+  else
+    echo -e "${RED}  ❌ CSS not found in dist/assets/${NC}"
+    return 1
+  fi
+'
+
 # Calculate duration
 END_TIME=$(date +%s)
 DURATION=$((END_TIME - START_TIME))
