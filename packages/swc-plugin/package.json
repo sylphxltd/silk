@@ -1,7 +1,8 @@
 {
   "name": "@sylphx/swc-plugin-silk",
   "version": "0.2.0",
-  "description": "SWC plugin for Silk - zero-runtime CSS-in-TypeScript",
+  "private": true,
+  "description": "SWC plugin for Silk - Build dependency for @sylphx/silk-nextjs (not published separately)",
   "keywords": [
     "swc",
     "swc-plugin",
@@ -22,16 +23,9 @@
   "bugs": {
     "url": "https://github.com/sylphxltd/silk/issues"
   },
-  "files": [
-    "dist/*.wasm",
-    "README.md",
-    "LICENSE"
-  ],
   "scripts": {
-    "build": "/Users/kyle/.cargo/bin/cargo build --release --target wasm32-wasip1 && mkdir -p dist && cp target/wasm32-wasip1/release/swc_plugin_silk.wasm dist/",
-    "build:copy": "mkdir -p dist && cp target/wasm32-wasip1/release/swc_plugin_silk.wasm dist/",
-    "test": "cargo test",
-    "prepublishOnly": "npm run build:copy"
+    "build": "cargo build --release --target wasm32-wasip1 && mkdir -p dist && cp target/wasm32-wasip1/release/swc_plugin_silk.wasm dist/",
+    "test": "cargo test"
   },
   "devDependencies": {
     "@swc/core": "^1.9.3",
@@ -39,8 +33,5 @@
     "typescript": "^5",
     "vitest": "^2.0.0",
     "@vitest/coverage-v8": "^2.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
