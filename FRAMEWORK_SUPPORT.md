@@ -4,14 +4,22 @@
 
 | Framework | Method | Setup | Status |
 |-----------|--------|-------|--------|
-| **Vite** | ✅ No-codegen | Virtual module | ✅ Implemented |
-| **Webpack** | ✅ No-codegen | Virtual module | ✅ Implemented |
-| **Next.js (webpack)** | ✅ No-codegen | Webpack plugin | ⚠️ To implement |
-| **Next.js (turbopack)** | ⚠️ Semi-codegen | CLI tool | ⚠️ To implement |
+| **Vite** | ✅ No-codegen | Virtual module | ✅ Tested |
+| **Webpack** | ✅ No-codegen | Virtual module | ✅ Tested |
+| **Next.js (webpack)** | ✅ No-codegen | Webpack plugin | ✅ Tested |
+| **Next.js (turbopack)** | ⚠️ Semi-codegen | CLI tool | ✅ Tested |
+| **Vue (Vite)** | ✅ No-codegen | Vite plugin | ✅ Ready |
+| **Vue (webpack)** | ✅ No-codegen | Webpack plugin | ✅ Ready |
+| **Nuxt 3** | ✅ No-codegen | Nuxt module | 📋 Planned |
+| **Svelte (Vite)** | ✅ No-codegen | Vite plugin | ✅ Ready |
+| **SvelteKit** | ✅ No-codegen | Vite plugin | ✅ Ready |
+| **Astro** | ✅ No-codegen | Vite plugin | ✅ Ready |
+| **Remix** | ✅ No-codegen | Vite plugin | ✅ Ready |
 | **Rollup** | ✅ No-codegen | Virtual module | 📋 Planned |
-| **Create React App** | ✅ No-codegen | Webpack plugin | 📋 Planned |
-| **Astro** | ✅ No-codegen | Integration | 📋 Planned |
-| **Remix** | ✅ No-codegen | Vite plugin | 📋 Planned |
+| **Create React App** | ✅ No-codegen | Webpack plugin | ✅ Ready |
+| **Angular** | ✅ No-codegen | Webpack plugin | ✅ Ready |
+| **Solid (Vite)** | ✅ No-codegen | Vite plugin | ✅ Ready |
+| **Qwik (Vite)** | ✅ No-codegen | Vite plugin | ✅ Ready |
 
 ---
 
@@ -124,25 +132,159 @@ next build      # Webpack production build
 - ✅ Works with App Router & Pages Router
 - ✅ Watch mode in dev
 
-### 4. Rollup
+### 4. Vue (Vite) ✅
 
-**Plugin**: `@sylphx/silk-rollup-plugin` (planned)
+**Plugin**: `@sylphx/silk-vite-plugin`
 
 **How it works**:
-- Uses `resolveId` + `load` hooks (same as Vite)
-- Creates virtual CSS module
+- Same as Vite plugin (Vue 3 官方推薦使用 Vite)
+- Virtual module via `resolveId` + `load` hooks
+
+**Setup**:
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import silk from '@sylphx/silk-vite-plugin'
+
+export default defineConfig({
+  plugins: [vue(), silk()]
+})
+```
+
+```typescript
+// main.ts
+import 'silk.css'  // Virtual module → Vite CSS pipeline
+```
+
+**Benefits**:
+- ✅ Zero-codegen
+- ✅ 與 Vue SFC 一齊走 Vite CSS pipeline
+- ✅ HMR support
+
+### 5. Vue (webpack / Vue CLI) ✅
+
+**Plugin**: `@sylphx/silk-webpack-plugin`
+
+**How it works**:
+- Same as webpack plugin
+- Works with Vue CLI (webpack-based)
 
 **Setup**:
 ```javascript
-// rollup.config.js
-import silk from '@sylphx/silk-rollup-plugin'
+// vue.config.js
+const SilkWebpackPlugin = require('@sylphx/silk-webpack-plugin');
 
-export default {
-  plugins: [silk()]
+module.exports = {
+  configureWebpack: {
+    plugins: [new SilkWebpackPlugin()]
+  }
 }
 ```
 
-### 5. Create React App
+```javascript
+// main.js
+import 'silk.css'  // Virtual module → webpack CSS pipeline
+```
+
+### 6. Nuxt 3 📋
+
+**Plugin**: `@sylphx/silk-nuxt` (planned)
+
+**How it works**:
+- Nuxt module that wraps Vite plugin
+- Similar to Next.js approach
+
+**Setup** (planned):
+```typescript
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['@sylphx/silk-nuxt']
+})
+```
+
+### 7. Svelte (Vite) ✅
+
+**Plugin**: `@sylphx/silk-vite-plugin`
+
+**How it works**:
+- Same as Vite plugin
+- Svelte 官方推薦使用 Vite
+
+**Setup**:
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
+import silk from '@sylphx/silk-vite-plugin'
+
+export default defineConfig({
+  plugins: [svelte(), silk()]
+})
+```
+
+```javascript
+// main.js
+import 'silk.css'  // Virtual module → Vite CSS pipeline
+```
+
+### 8. SvelteKit ✅
+
+**Plugin**: `@sylphx/silk-vite-plugin`
+
+**How it works**:
+- SvelteKit 基於 Vite，直接用 Vite plugin
+
+**Setup**:
+```javascript
+// vite.config.js
+import { sveltekit } from '@sveltejs/kit/vite'
+import silk from '@sylphx/silk-vite-plugin'
+
+export default {
+  plugins: [sveltekit(), silk()]
+}
+```
+
+### 9. Astro ✅
+
+**Plugin**: `@sylphx/silk-vite-plugin`
+
+**How it works**:
+- Astro 基於 Vite，直接用 Vite plugin
+
+**Setup**:
+```javascript
+// astro.config.mjs
+import { defineConfig } from 'astro/config'
+import silk from '@sylphx/silk-vite-plugin'
+
+export default defineConfig({
+  vite: {
+    plugins: [silk()]
+  }
+})
+```
+
+### 10. Remix ✅
+
+**Plugin**: `@sylphx/silk-vite-plugin`
+
+**How it works**:
+- Remix 2.0+ 基於 Vite
+
+**Setup**:
+```javascript
+// vite.config.js
+import { vitePlugin as remix } from '@remix-run/dev'
+import silk from '@sylphx/silk-vite-plugin'
+
+export default {
+  plugins: [remix(), silk()]
+}
+```
+
+### 11. Create React App ✅
 
 **Plugin**: `@sylphx/silk-webpack-plugin` (via craco/rewire)
 
@@ -158,6 +300,80 @@ module.exports = {
   webpack: {
     plugins: [new SilkWebpackPlugin()]
   }
+}
+```
+
+### 12. Angular ✅
+
+**Plugin**: `@sylphx/silk-webpack-plugin`
+
+**How it works**:
+- Angular 使用 webpack
+- 通過 custom webpack builder 注入
+
+**Setup**:
+```javascript
+// angular.json + custom-webpack.config.js
+const SilkWebpackPlugin = require('@sylphx/silk-webpack-plugin');
+
+module.exports = {
+  plugins: [new SilkWebpackPlugin()]
+}
+```
+
+### 13. Solid (Vite) ✅
+
+**Plugin**: `@sylphx/silk-vite-plugin`
+
+**How it works**:
+- Solid 官方推薦使用 Vite
+
+**Setup**:
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite'
+import solid from 'vite-plugin-solid'
+import silk from '@sylphx/silk-vite-plugin'
+
+export default defineConfig({
+  plugins: [solid(), silk()]
+})
+```
+
+### 14. Qwik (Vite) ✅
+
+**Plugin**: `@sylphx/silk-vite-plugin`
+
+**How it works**:
+- Qwik 基於 Vite
+
+**Setup**:
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite'
+import { qwikVite } from '@builder.io/qwik/optimizer'
+import silk from '@sylphx/silk-vite-plugin'
+
+export default defineConfig({
+  plugins: [qwikVite(), silk()]
+})
+```
+
+### 15. Rollup 📋
+
+**Plugin**: `@sylphx/silk-rollup-plugin` (planned)
+
+**How it works**:
+- Uses `resolveId` + `load` hooks (same as Vite)
+- Creates virtual CSS module
+
+**Setup**:
+```javascript
+// rollup.config.js
+import silk from '@sylphx/silk-rollup-plugin'
+
+export default {
+  plugins: [silk()]
 }
 ```
 
@@ -370,17 +586,26 @@ silk generate --watch  # Auto-regenerate
 
 | 場景 | 推薦 |
 |------|------|
-| **新項目** | Vite (fastest DX, best no-codegen) |
+| **新項目 (React/Vue/Svelte)** | Vite (fastest DX, best no-codegen) |
+| **Vue 3 項目** | Vite + @sylphx/silk-vite-plugin |
+| **Vue 2 / Vue CLI** | Webpack + @sylphx/silk-webpack-plugin |
+| **Nuxt 3** | 等 @sylphx/silk-nuxt，暫時用 Vite plugin |
+| **Svelte / SvelteKit** | Vite + @sylphx/silk-vite-plugin |
 | **Next.js App** | Next.js + webpack mode (no-codegen) |
-| **既有 webpack** | Webpack plugin (no-codegen) |
 | **Next.js + Turbopack** | Semi-codegen (等 Turbopack plugin API) |
+| **Astro** | Vite + @sylphx/silk-vite-plugin |
+| **Remix** | Vite + @sylphx/silk-vite-plugin |
+| **Solid** | Vite + @sylphx/silk-vite-plugin |
+| **Angular** | Webpack + @sylphx/silk-webpack-plugin |
+| **既有 webpack** | Webpack plugin (no-codegen) |
 
 ### 未來改進
 
 1. **Turbopack Plugin API**: 等 Turbopack 開放 plugin API 就可以做到 no-codegen
-2. **AST Parsing**: 改用 `@babel/parser` 或 `@swc/core` 替代 regex
-3. **Incremental Generation**: Cache + 只 re-parse changed files
-4. **Framework Integrations**: Remix, Astro, SvelteKit, etc.
+2. **Nuxt 3 Module**: 創建專門的 Nuxt module 包裝 Vite plugin
+3. **Rollup Plugin**: 獨立的 Rollup plugin（雖然大部分 Rollup 用戶已轉用 Vite）
+4. **AST Parsing**: 改用 `@babel/parser` 或 `@swc/core` 替代 regex
+5. **Incremental Generation**: Cache + 只 re-parse changed files
 
 ---
 
