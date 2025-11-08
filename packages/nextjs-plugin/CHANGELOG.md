@@ -1,5 +1,16 @@
 # @sylphx/silk-nextjs
 
+## 2.1.2
+
+### Patch Changes
+
+- Fix virtual module path resolution bug in automatic CSS injection
+
+  - Fixed "Module not found: Error: Can't resolve '**silk_auto_inject**'" error
+  - Create virtual CSS module with generated content from compilation.assets
+  - Use webpack compilation hooks (thisCompilation → processAssets)
+  - Maintain fully automatic CSS injection (no manual imports required)
+
 ## 2.0.7
 
 ### Patch Changes
