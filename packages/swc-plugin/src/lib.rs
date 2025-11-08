@@ -111,31 +111,111 @@ pub fn normalize_css_value(property: &str, value: &str) -> String {
     value.to_string()
 }
 
-/// Simple hash function for class names
-fn hash_string(s: &str) -> String {
-    let mut hash: u32 = 0;
+/// MurmurHash2 implementation (matches @emotion/hash and Babel plugin)
+/// Returns Base-36 encoded hash for optimal compression
+///
+/// JavaScript equivalent:
+/// ```js
+/// let h = 0
+/// for (let i = 0; i < str.length; i++) {
+///   const c = str.charCodeAt(i)
+///   h = Math.imul(h ^ c, 0x5bd1e995)
+///   h ^= h >>> 13
+/// }
+/// return (h >>> 0).toString(36)
+/// ```
+fn murmur_hash2(s: &str) -> String {
+    let mut h: u32 = 0;
+
     for ch in s.chars() {
-        hash = hash.wrapping_shl(5).wrapping_sub(hash).wrapping_add(ch as u32);
+        let c = ch as u32;
+        // IMPORTANT: Must XOR first, THEN multiply (not separate steps)
+        h = (h ^ c).wrapping_mul(0x5bd1e995);
+        h ^= h >> 13;
     }
-    format!("{:x}", hash).chars().take(4).collect()
+
+    // Convert to Base-36 (0-9, a-z)
+    base36_encode(h)
+}
+
+/// Encode u32 to Base-36 string (0-9, a-z)
+fn base36_encode(mut num: u32) -> String {
+    if num == 0 {
+        return "0".to_string();
+    }
+
+    const CHARSET: &[u8] = b"0123456789abcdefghijklmnopqrstuvwxyz";
+    let mut result = Vec::new();
+
+    while num > 0 {
+        result.push(CHARSET[(num % 36) as usize] as char);
+        num /= 36;
+    }
+
+    result.reverse();
+    result.into_iter().collect()
+}
+
+/// Hash property-value pair (matches Babel plugin format)
+fn hash_property_value(property: &str, value: &str, variant: &str) -> String {
+    // Format: "property:value:variant" (same as Babel plugin)
+    let content = if variant.is_empty() {
+        format!("{}:\"{}\":", property, value)
+    } else {
+        format!("{}:\"{}\":{}", property, value, variant)
+    };
+    murmur_hash2(&content)
 }
 
 /// Generate class name for property-value pair
-pub fn generate_class_name(property: &str, value: &str, prefix: &str) -> String {
-    let css_property = resolve_css_property(property);
-    let css_value = normalize_css_value(property, value);
+/// Supports both development and production modes
+pub fn generate_class_name(property: &str, value: &str, config: &Config) -> String {
+    // IMPORTANT: Hash using ORIGINAL property and value (not resolved/normalized)
+    // This matches Babel plugin behavior
+    let hash = hash_property_value(property, value, "");
 
-    // Create safe value for class name
-    let safe_value = value
-        .replace(' ', "_")
-        .replace('(', "")
-        .replace(')', "")
-        .replace('#', "")
-        .replace('.', "_");
+    if config.production {
+        // Production mode: short hash (6-7 chars) with digit mapping
+        // CSS class names cannot start with a digit, so map 0-9 to g-p
+        let mut short_hash = hash.chars().take(8).collect::<String>();
 
-    let hash = hash_string(&format!("{}{}", css_property, css_value));
+        if let Some(first_char) = short_hash.chars().next() {
+            if first_char.is_ascii_digit() {
+                // Map 0→g, 1→h, 2→i, ..., 9→p
+                let mapped_char = (b'g' + (first_char as u8 - b'0')) as char;
+                short_hash = format!("{}{}", mapped_char, &short_hash[1..]);
+            }
+        }
 
-    format!("{}_{}_{}_{}", prefix, property, safe_value, hash)
+        // Apply custom prefix if provided (for branding)
+        if !config.class_prefix.is_empty() && config.class_prefix != "s" {
+            return format!("{}{}", config.class_prefix, short_hash);
+        }
+
+        short_hash
+    } else {
+        // Development mode: descriptive class names
+        let prefix = if config.class_prefix.is_empty() {
+            "silk"
+        } else {
+            &config.class_prefix
+        };
+
+        // Create safe value for class name
+        let safe_value = value
+            .replace(' ', "_")
+            .replace('(', "")
+            .replace(')', "")
+            .replace('#', "")
+            .replace('.', "_")
+            .chars()
+            .take(10)
+            .collect::<String>();
+
+        let short_hash = hash.chars().take(4).collect::<String>();
+
+        format!("{}_{}_{}_{}", prefix, property, safe_value, short_hash)
+    }
 }
 
 /// Generate CSS rule for property-value pair
@@ -212,7 +292,7 @@ impl VisitMut for SilkTransformVisitor {
                             let class_name = generate_class_name(
                                 property,
                                 value,
-                                &self.config.class_prefix,
+                                &self.config,
                             );
 
                             // Generate and collect CSS rule
@@ -322,10 +402,95 @@ mod tests {
     }
 
     #[test]
-    fn test_generate_class_name() {
-        let class_name = generate_class_name("bg", "red", "silk");
+    fn test_base36_encode() {
+        assert_eq!(base36_encode(0), "0");
+        assert_eq!(base36_encode(10), "a");
+        assert_eq!(base36_encode(35), "z");
+        assert_eq!(base36_encode(36), "10");
+    }
+
+    #[test]
+    fn test_murmur_hash2() {
+        // Test that hash is deterministic
+        let hash1 = murmur_hash2("test");
+        let hash2 = murmur_hash2("test");
+        assert_eq!(hash1, hash2);
+
+        // Test that different inputs produce different hashes
+        let hash3 = murmur_hash2("different");
+        assert_ne!(hash1, hash3);
+
+        // Test Base-36 output (only 0-9, a-z)
+        assert!(hash1.chars().all(|c| c.is_ascii_alphanumeric() && !c.is_uppercase()));
+    }
+
+    #[test]
+    fn test_generate_class_name_dev_mode() {
+        let config = Config {
+            production: false,
+            class_prefix: "silk".to_string(),
+        };
+        let class_name = generate_class_name("bg", "red", &config);
         assert!(class_name.starts_with("silk_bg_red_"));
         assert_eq!(class_name.split('_').count(), 4); // prefix_prop_value_hash
+    }
+
+    #[test]
+    fn test_generate_class_name_production_mode() {
+        let config = Config {
+            production: true,
+            class_prefix: String::new(),
+        };
+        let class_name = generate_class_name("bg", "red", &config);
+
+        // Should be 6-8 characters
+        assert!(class_name.len() >= 6 && class_name.len() <= 8);
+
+        // Should start with a letter (not a digit)
+        assert!(class_name.chars().next().unwrap().is_ascii_alphabetic());
+
+        // Should only contain alphanumeric characters
+        assert!(class_name.chars().all(|c| c.is_ascii_alphanumeric()));
+    }
+
+    #[test]
+    fn test_digit_mapping() {
+        let config = Config {
+            production: true,
+            class_prefix: String::new(),
+        };
+
+        // Test multiple properties to ensure we hit some that start with digits
+        let properties = vec![
+            ("p", "8"),
+            ("m", "4"),
+            ("bg", "red"),
+            ("color", "blue"),
+        ];
+
+        for (prop, value) in properties {
+            let class_name = generate_class_name(prop, value, &config);
+            let first_char = class_name.chars().next().unwrap();
+
+            // First character must be a letter (g-p if mapped from digit)
+            assert!(first_char.is_ascii_alphabetic(),
+                "Class name '{}' starts with non-letter '{}'", class_name, first_char);
+        }
+    }
+
+    #[test]
+    fn test_production_with_custom_prefix() {
+        let config = Config {
+            production: true,
+            class_prefix: "app".to_string(),
+        };
+        let class_name = generate_class_name("bg", "red", &config);
+
+        // Should start with custom prefix
+        assert!(class_name.starts_with("app"));
+
+        // Should be prefix + hash (9-11 chars)
+        assert!(class_name.len() >= 9 && class_name.len() <= 11);
     }
 
     #[test]
@@ -333,5 +498,60 @@ mod tests {
         let class_name = "silk_bg_red_a7f3";
         let rule = generate_css_rule(class_name, "bg", "red");
         assert_eq!(rule, ".silk_bg_red_a7f3 { background-color: red; }");
+    }
+
+    #[test]
+    fn test_hash_consistency() {
+        // Test that hashing the same property-value produces the same result
+        let hash1 = hash_property_value("background-color", "red", "");
+        let hash2 = hash_property_value("background-color", "red", "");
+        assert_eq!(hash1, hash2);
+    }
+
+    #[test]
+    fn test_babel_swc_consistency() {
+        // Test that SWC plugin generates the same class names as Babel plugin
+        // These expected values come from running test-hash-consistency.mjs
+        let config = Config {
+            production: true,
+            class_prefix: String::new(),
+        };
+
+        let test_cases = vec![
+            ("bg", "red", "oqmaqr"),
+            ("p", "8", "js61pc"),
+            ("p", "4", "azg4xx"),
+            ("m", "2", "hyolz3s"),
+            ("color", "blue", "h7qhtp"),
+            ("fontSize", "16px", "h5ld1bc"),
+            ("maxWidth", "800px", "a9cob9"),
+            ("borderRadius", "12px", "hhxlwrj"),
+        ];
+
+        println!("\n🔍 Verifying Babel-SWC hash consistency:");
+        println!("{}", "-".repeat(60));
+
+        for (property, value, expected) in test_cases {
+            let actual = generate_class_name(property, value, &config);
+            let matches = actual == expected;
+
+            println!(
+                "{}: '{}' → {} (expected: {}) {}",
+                format!("{:15}", property),
+                format!("{:10}", value),
+                actual,
+                expected,
+                if matches { "✅" } else { "❌" }
+            );
+
+            assert_eq!(
+                actual, expected,
+                "SWC generated '{}' but Babel generated '{}' for {}:'{}'",
+                actual, expected, property, value
+            );
+        }
+
+        println!("{}", "-".repeat(60));
+        println!("✅ All class names match Babel plugin!\n");
     }
 }
