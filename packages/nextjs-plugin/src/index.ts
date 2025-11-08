@@ -111,11 +111,6 @@ export function withSilk(
       // Turbopack configuration
       turbo: {
         ...nextConfig.turbo,
-        resolveAlias: {
-          ...nextConfig.turbo?.resolveAlias,
-          // Prevent lightningcss from being bundled in client builds
-          'lightningcss': false,
-        },
       },
     },
   } : {}
@@ -157,17 +152,6 @@ export function withSilk(
 
       // Add Silk unplugin (generates CSS to static/css/silk.css)
       config.plugins.push(unpluginSilk.webpack(silkPluginOptions))
-
-      // Mark lightningcss as external to prevent bundling in client builds
-      // It's only used server-side for CSS optimization via dynamic import
-      config.externals = config.externals || []
-      if (!isServer) {
-        if (Array.isArray(config.externals)) {
-          config.externals.push('lightningcss')
-        } else if (typeof config.externals === 'object') {
-          config.externals = { ...config.externals, lightningcss: 'lightningcss' }
-        }
-      }
 
       return config
     },

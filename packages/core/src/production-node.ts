@@ -1,38 +1,49 @@
 /**
- * Node.js-only production optimizations
- * DO NOT import this in browser builds
- * Uses lightningcss (native Node.js addon)
+ * Universal CSS optimization using LightningCSS WASM
+ * Works everywhere: Node.js, Bun, Deno, Turbopack, browsers
+ * Uses WebAssembly (no native bindings - Turbopack compatible!)
  */
 
 import type { ProductionConfig, CSSOptimizationResult } from './production.js'
 import { optimizeCSS } from './production.js'
 
-// Dynamic import to avoid bundling native dependencies
-type LightningCSS = typeof import('lightningcss')
-let lightningcss: LightningCSS | null = null
+// Dynamic import to avoid bundling WASM in runtime
+type LightningCSSWASM = typeof import('lightningcss-wasm')
+let lightningcss: LightningCSSWASM | null = null
+let wasmInitialized = false
 
-// Lazy load lightningcss only when needed (server environments: Node.js, Bun, Deno)
-async function loadLightningCSS(): Promise<LightningCSS | null> {
+// Lazy load lightningcss-wasm only when needed
+async function loadLightningCSS(): Promise<LightningCSSWASM | null> {
   if (lightningcss) return lightningcss
 
-  // Check if we're in a server environment (not browser)
-  if (typeof window === 'undefined') {
-    try {
-      lightningcss = await import('lightningcss')
-      return lightningcss
-    } catch (error) {
-      // LightningCSS not available - fall back to manual optimization
-      return null
-    }
-  }
+  try {
+    // Import WASM module
+    lightningcss = await import('lightningcss-wasm')
 
-  // Browser environment - lightningcss cannot run
-  return null
+    // Initialize WASM (required before first use)
+    if (!wasmInitialized && lightningcss.default) {
+      await lightningcss.default()
+      wasmInitialized = true
+    }
+
+    return lightningcss
+  } catch (error) {
+    // LightningCSS WASM not available - fall back to pure JS optimization
+    return null
+  }
 }
 
 /**
- * Optimize CSS with LightningCSS (5-10x faster than manual optimization)
- * Automatically falls back to manual optimization if lightningcss unavailable
+ * Optimize CSS with LightningCSS WASM
+ *
+ * Benefits:
+ * - 5-10x faster than pure JS optimization
+ * - Works everywhere: Node.js, Bun, Deno, Turbopack, browsers
+ * - No native bindings (Turbopack compatible!)
+ * - Automatic vendor prefixing
+ * - Better minification (5-10% smaller)
+ *
+ * Automatically falls back to pure JS if WASM unavailable
  */
 export async function optimizeCSSWithLightning(
   css: string,
