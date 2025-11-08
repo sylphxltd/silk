@@ -1,6 +1,6 @@
 {
   "name": "@sylphx/silk-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI tool for Silk - Generate CSS for semi-codegen frameworks",
   "keywords": [
     "silk",

@@ -1,5 +1,11 @@
 # @sylphx/silk-nextjs
 
+## 3.0.1
+
+### Patch Changes
+
+- @sylphx/silk-webpack-plugin@1.0.1
+
 ## 3.0.0
 
 ### Major Changes

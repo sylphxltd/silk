@@ -1,5 +1,12 @@
 # vite-react-test
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [3e30487]
+  - @sylphx/silk@2.1.0
+
 ## 0.0.2
 
 ### Patch Changes

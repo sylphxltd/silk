@@ -1,5 +1,12 @@
 # @sylphx/silk-preset-minimal
 
+## 4.0.0
+
+### Patch Changes
+
+- Updated dependencies [3e30487]
+  - @sylphx/silk@2.1.0
+
 ## 3.0.0
 
 ### Patch Changes
