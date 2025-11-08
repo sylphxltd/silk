@@ -1,5 +1,30 @@
 # @sylphx/silk-nextjs
 
+## 3.1.0
+
+### Minor Changes
+
+- Auto-detect bundler at runtime (webpack vs turbopack)
+
+  **New Feature:**
+
+  - Automatically detects which bundler Next.js is actually using
+  - Same configuration works for both `next dev` and `next dev --turbo`
+  - No need to manually set `turbopack: true/false`
+
+  **How it works:**
+
+  - When Next.js calls webpack() → Silk uses webpack mode (virtual CSS)
+  - When Next.js doesn't call webpack() → Silk expects CLI mode (generated CSS)
+
+  **Migration:**
+  No changes needed! Your existing config will auto-adapt:
+
+  ```javascript
+  // Works for both webpack AND turbopack
+  export default withSilk({});
+  ```
+
 ## 3.0.3
 
 ### Patch Changes
