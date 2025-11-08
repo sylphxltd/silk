@@ -18,21 +18,21 @@
 
 ### 🚀 What's New
 
-#### 🎉 Next.js 16 + Turbopack Support (v0.2.0 Available!)
+#### 🎉 Next.js 16 + Turbopack Support (Auto-Optimized!)
 
-**SWC Plugin v0.2.0 - Production Ready:**
-- 🦀 Native Rust implementation (WASM)
-- ⚡ **20-70x faster** than Babel plugin
-- 🚀 Full Turbopack compatibility
+**One package, maximum performance:**
+- 🦀 Native Rust SWC plugin **auto-installed**
+- ⚡ **20-70x faster** with Turbopack
+- 🚀 Zero configuration needed
 - ✅ 100% hash consistency with Babel plugin
-- ✅ Complete feature parity (production mode, digit mapping)
+- ✅ Automatic Webpack/Turbopack detection
 - 📊 144 tests passing (0 failures)
 
 ```bash
-bun add @sylphx/swc-plugin-silk
+bun add @sylphx/silk-nextjs  # That's it!
 ```
 
-[View SWC Plugin Documentation →](./packages/swc-plugin/README.md) • [Turbopack Setup Guide →](#turbopack-setup)
+[View Next.js Documentation →](./packages/nextjs-plugin/README.md)
 
 #### v2.0.0: True Zero-Runtime
 
@@ -468,15 +468,13 @@ Silk now provides **first-class integration packages** with **zero-runtime compi
 
 ```bash
 bun add @sylphx/silk-nextjs
-
-# For Turbopack (Next.js 15/16 with --turbo):
-bun add @sylphx/swc-plugin-silk  # Automatic 20-70x speedup
 ```
 
-**Features:**
+**One package, works everywhere!** Automatically includes:
 - ✅ **Zero-runtime** build-time compilation
 - ✅ Full App Router support with React Server Components
-- ✅ **Automatic Webpack/Turbopack detection** - no config needed!
+- ✅ **Automatic Webpack/Turbopack optimization** - no config needed!
+- ✅ **20-70x faster** with Turbopack (SWC plugin auto-installed)
 - ✅ Automatic CSS extraction during build
 - ✅ Brotli pre-compression
 - ✅ HMR with state preservation
@@ -493,7 +491,6 @@ export default withSilk({
     production: true
   }
 })
-// No Turbopack config needed - automatic detection!
 ```
 
 ```typescript
@@ -505,9 +502,9 @@ export default function RootLayout({ children }) {
 }
 ```
 
-**How it works:**
-- **Webpack builds** → Uses Babel plugin automatically
-- **Turbopack builds** → Uses SWC plugin (Rust) if installed, otherwise falls back to Babel
+**Automatic optimization:**
+- **Webpack builds** → Babel plugin (works immediately)
+- **Turbopack builds** → SWC plugin (Rust, 20-70x faster, auto-installed)
 
 [View Full Next.js Documentation →](./packages/nextjs-plugin/README.md)
 
