@@ -1,6 +1,6 @@
 {
   "name": "@sylphx/silk-nextjs",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Next.js integration for Silk - zero-runtime CSS-in-TypeScript with App Router support",
   "keywords": [
     "css",
@@ -45,7 +45,7 @@
     "prepublishOnly": "bun run build"
   },
   "peerDependencies": {
-    "next": "^13.0.0 || ^14.0.0 || ^15.0.0",
+    "next": "^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0",
     "react": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
