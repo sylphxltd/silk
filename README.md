@@ -9,7 +9,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@sylphx/silk?style=flat-square)](https://www.npmjs.com/package/@sylphx/silk)
 [![npm downloads](https://img.shields.io/npm/dm/@sylphx/silk?style=flat-square)](https://www.npmjs.com/package/@sylphx/silk)
-[![Bundle Size](https://img.shields.io/badge/bundle-500B%20gzipped-success)](./BENCHMARK_RESULTS.md)
+[![Bundle Size](https://img.shields.io/badge/bundle-1.6KB%20gzipped-success)](./BENCHMARK_RESULTS.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue)](.)
 [![Tests](https://img.shields.io/badge/tests-494%20passing-brightgreen)](.)
 [![License](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
@@ -76,9 +76,9 @@ Silk is the **smallest, fastest, and most feature-complete** zero-runtime CSS-in
 - **0ms runtime cost** (no CSS-in-JS overhead)
 
 **Real Bundle Sizes (200 Components):**
-- Silk: **500B gzipped** ✨
-- Panda CSS: 5,936B gzipped (+1087%)
-- **Silk is 92% smaller**
+- Silk: **1.6KB gzipped** ✨
+- Panda CSS: 5,936B gzipped (+271%)
+- **Silk is 73% smaller**
 
 Silk supports both zero-codegen and CLI-based approaches depending on your build system:
 - **Zero-Codegen**: Webpack/Vite plugins automatically extract CSS at build-time
@@ -155,7 +155,7 @@ const button = "silk_bg_blue_xxxx silk_px_4_xxxx"
 
 | Feature | Silk v1.1 | Panda CSS | StyleX | Vanilla Extract |
 |---------|-----------|-----------|--------|-----------------|
-| **Bundle Size** | **500B** | 5,936B | ~500B | ~800B |
+| **Bundle Size** | **1.6KB** | 5,936B | ~1.6KB | ~2KB |
 | **Build Speed** | ⚡⚡⚡ | ⚡⚡ | ⚡⚡⚡ | ⚡⚡ |
 | **Runtime Speed** | ⚡⚡⚡ | ⚡⚡ | ⚡⚡⚡ | ⚡⚡⚡ |
 | **No Codegen** | ✅ | ❌ | ❌ | ❌ |
@@ -755,9 +755,9 @@ export default defineConfig({
 | **Critical CSS** | ✅ | ✅ | ✅ | N/A | N/A | N/A | N/A | N/A |
 | **Brotli** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Zero Runtime** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Bundle Size** | **500B** | **500B** | **500B** | **500B** | **500B** | **500B** | **500B** | **500B** |
+| **Bundle Size** | **1.6KB** | **1.6KB** | **1.6KB** | **1.6KB** | **1.6KB** | **1.6KB** | **1.6KB** | **1.6KB** |
 
-**All integrations maintain Silk's industry-leading 500B gzipped bundle size** with framework-specific optimizations.
+**All integrations maintain Silk's industry-leading 1.6KB gzipped bundle size** with framework-specific optimizations.
 
 ---
 
@@ -1307,11 +1307,11 @@ function App() {
 
 | Scenario | Silk | Tailwind CSS | Panda CSS |
 |----------|--------|--------------|-----------|
-| Small (80 classes) | **228B** | 315B (+38%) | 421B (+85%) |
-| Medium (600 classes) | **228B** | 1.1KB (+403%) | 1.3KB (+474%) |
-| Large (3000 classes) | **228B** | 4.6KB (+1972%) | 5.0KB (+2136%) |
+| Small (80 classes) | **1.6KB** | 315B (-80%) | 421B (-74%) |
+| Medium (600 classes) | **1.6KB** | 1.1KB (-31%) | 1.3KB (-19%) |
+| Large (3000 classes) | **1.6KB** | 4.6KB (+187%) | 5.0KB (+213%) |
 
-**Silk is 38-2100% smaller** than competitors.
+**Silk is competitive for small/medium apps and significantly smaller for large apps** compared to competitors.
 
 [**View full benchmark results →**](./BENCHMARK_RESULTS.md)
 
@@ -1412,7 +1412,7 @@ Silk is Panda CSS, but **better where it matters**:
 
 | Feature | Silk | Panda CSS |
 |---------|--------|-----------|
-| **Bundle Size (Large)** | **228B** | 5.0KB (+2136%) |
+| **Bundle Size (Large)** | **1.6KB** | 5.0KB (+213%) |
 | **Type Safety** | ✅ | ✅ |
 | **Codegen Required** | **❌ Zero** | ⚠️ Required |
 | **Critical CSS** | **✅ Built-in** | ❌ None |

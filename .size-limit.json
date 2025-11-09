@@ -1,0 +1,22 @@
+[
+  {
+    "path": "packages/core/dist/index.js",
+    "limit": "1.6 KB",
+    "gzip": true
+  },
+  {
+    "path": "packages/babel-plugin-silk/dist/index.js",
+    "limit": "2 KB",
+    "gzip": true
+  },
+  {
+    "path": "packages/cli/dist/index.js",
+    "limit": "3 KB",
+    "gzip": true
+  },
+  {
+    "path": "packages/vite-plugin/dist/index.js",
+    "limit": "2 KB",
+    "gzip": true
+  }
+]
