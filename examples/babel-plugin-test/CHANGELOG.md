@@ -1,5 +1,13 @@
 # babel-plugin-test
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [6c72939]
+  - @sylphx/babel-plugin-silk@2.0.4
+  - @sylphx/silk@2.1.1
+
 ## 0.0.5
 
 ### Patch Changes

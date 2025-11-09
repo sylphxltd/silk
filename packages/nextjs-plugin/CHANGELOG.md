@@ -1,5 +1,13 @@
 # @sylphx/silk-nextjs
 
+## 3.3.2
+
+### Patch Changes
+
+- 6c72939: fix(nextjs): add empty turbopack config to silence Next.js 16 warning
+
+  Next.js 16 shows a warning when using webpack config without turbopack config. Added `turbopack: {}` to silence this warning when using Turbopack mode with Babel support.
+
 ## 3.3.1
 
 ### Patch Changes

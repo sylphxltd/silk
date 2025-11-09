@@ -1,6 +1,6 @@
 {
   "name": "@sylphx/silk-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "CLI tool for Silk - Generate CSS for semi-codegen frameworks",
   "keywords": [
     "silk",
@@ -43,7 +43,7 @@
     "prepublishOnly": "bun run build"
   },
   "dependencies": {
-    "@sylphx/silk": "^2.1.0",
+    "@sylphx/silk": "^2.1.1",
     "chokidar": "^4.0.3",
     "commander": "^12.0.0"
   },
