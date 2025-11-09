@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "workspaces": ["packages/*", "examples/*"],
+  "packageManager": "bun@1.2.23",
+  "workspaces": ["packages/*", "examples/*", "docs"],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",

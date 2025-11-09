@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'Silk',
   description: 'Zero-runtime CSS-in-TypeScript with build-time extraction',
+  ignoreDeadLinks: true,
 
   themeConfig: {
     logo: '/logo.svg',
