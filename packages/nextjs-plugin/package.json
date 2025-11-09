@@ -36,7 +36,6 @@
     "dist/**/*.js",
     "dist/**/*.d.ts",
     "dist/**/*.d.ts.map",
-    "dist/**/*.wasm",
     "src/silk-loader.js",
     "README.md",
     "LICENSE"

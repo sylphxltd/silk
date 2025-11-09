@@ -96,17 +96,6 @@ export function withSilk(
     ...generateOptions
   } = silkConfig;
 
-  // Path to bundled SWC plugin WASM
-  const swcPluginPath = path.join(__dirname, 'swc_plugin_silk.wasm');
-
-  // Check if WASM file exists
-  const wasmExists = fs.existsSync(swcPluginPath);
-
-  if (enableTurbopack && !wasmExists) {
-    console.warn('[Silk] Warning: SWC plugin WASM not found at', swcPluginPath);
-    console.warn('[Silk] Turbopack mode requires the bundled SWC plugin for css() transformation');
-  }
-
   return {
     ...nextConfig,
 
