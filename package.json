@@ -2,8 +2,19 @@
   "name": "silk-workspace",
   "private": true,
   "version": "0.0.1",
+  "description": "Monorepo for Silk - Zero-runtime CSS framework with type-safe utilities and minimal bundle size",
   "type": "module",
   "packageManager": "bun@1.2.23",
+  "author": "Sylphx <hi@sylphx.com> (https://sylphx.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SylphxAI/silk.git"
+  },
+  "homepage": "https://github.com/SylphxAI/silk#readme",
+  "bugs": {
+    "url": "https://github.com/SylphxAI/silk/issues"
+  },
   "workspaces": ["packages/*", "examples/*", "docs"],
   "scripts": {
     "build": "turbo run build",
