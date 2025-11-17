@@ -34,7 +34,7 @@
     "clean": "turbo run clean && rm -rf .next node_modules/.cache",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "changeset publish"
+    "release": "bun run build && changeset publish"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
